@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -32,10 +33,11 @@ fun DrawerHeader() {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Column() {
+        Column {
             Image(
                 painter = painterResource(R.drawable.profile),
-                contentDescription = null,
+                contentDescription = "Profile image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(30.dp)
                     .clip(CircleShape)
@@ -45,13 +47,13 @@ fun DrawerHeader() {
 
             Spacer(modifier = Modifier.height(7.dp))
 
-            Row() {
-                Row() {
+            Row {
+                Row {
                     Text("1707 ", fontWeight = FontWeight.Bold)
                     Text("Students")
                 }
                 Spacer(modifier = Modifier.width(10.dp))
-                Row() {
+                Row {
                     Text("307 ", fontWeight = FontWeight.Bold)
                     Text("Transactions")
                 }
@@ -84,6 +86,10 @@ fun DrawerBody(
                 Icon(imageVector = item.icon, contentDescription = item.contentDescription)
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(text = item.title, style = itemTextStyle, modifier = Modifier.weight(1f))
+            }
+
+            if(item.drawer) {
+                Divider(thickness = 0.5.dp, color = MaterialTheme.colors.onBackground, modifier = Modifier.padding(vertical = 20.dp))
             }
         }
     }
