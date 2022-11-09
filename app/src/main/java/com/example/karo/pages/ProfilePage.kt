@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.karo.PageTitle
 import com.example.karo.Routes
 import com.example.karo.components.MainViewModel
 
@@ -20,6 +21,7 @@ fun ProfilePage(viewModel: MainViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        PageTitle(title = "Fee Payment")
         Text(text = "ProfilePage.", style = MaterialTheme.typography.bodyLarge)
     }
 }
