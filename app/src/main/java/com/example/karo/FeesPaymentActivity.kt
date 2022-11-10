@@ -47,8 +47,8 @@ fun WalletInfo(balance: Double) {
             Text(text = "KES ${"%,.2f".format(balance)}", fontSize = 30.sp, color = MaterialTheme.colors.primary)
         }
     }
-    Divider(thickness = 0.5.dp, color = MaterialTheme.colors.onBackground, modifier = Modifier.padding(bottom = 20.dp))
 
+    Divider(thickness = 0.5.dp, color = MaterialTheme.colors.onBackground, modifier = Modifier.padding(bottom = 20.dp))
 }
 
 @Composable

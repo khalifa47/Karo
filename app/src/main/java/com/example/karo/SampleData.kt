@@ -1,5 +1,9 @@
 package com.example.karo
 
+import com.example.karo.pages.Transaction
+import com.example.karo.pages.TransactionStatus
+import com.example.karo.pages.TransactionType
+
 object SampleData {
     // Sample conversation data
     val transactionSample = listOf(

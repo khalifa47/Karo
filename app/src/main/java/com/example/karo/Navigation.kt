@@ -7,27 +7,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
-object Routes {
-    const val FeePayment = "fee_payment"
-    const val Transactions = "transactions"
-}
-
+/*
 @Composable
 fun Navigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Routes.Transactions
+    startDestination: String = Routes.Settings.route
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(Routes.FeePayment){
-            FeePayment(onNavigateToTransactions = { navController.navigate(Routes.Transactions) })
+        composable(Routes.FeePayment.route){
+            FeePayment(onNavigateToTransactions = { navController.navigate(Routes.Transactions.route) })
         }
-        composable(Routes.Transactions){
-            Transactions(onNavigateToPayments = { navController.navigate(Routes.FeePayment) })
+        composable(Routes.Transactions.route){
+            Transactions(onNavigateToPayments = { navController.navigate(Routes.FeePayment.route) })
         }
     }
-}
+}*/
