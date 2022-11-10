@@ -9,14 +9,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +30,7 @@ import com.example.karo.doNothing
 data class CardAction(
     val title: String,
     val image: Int,
-    val backgroundColorResourceId: Int = R.color.white,
+    val backgroundColorPrimary: Boolean = false,
     val route: String = Routes.Home.name
 )
 
@@ -42,23 +41,23 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
     Box(modifier = Modifier.padding(20.dp)) {
         Column {
             Text("Good Morning", fontSize = 24.sp)
-            Text("Ghost Rider", color = Color.Blue)
+            Text("Ghost Rider", color = MaterialTheme.colors.primary)
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Card(
                 elevation = 4.dp,
                 shape = RoundedCornerShape(10.dp),
-                backgroundColor = colorResource(R.color.blue),
+                backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier
                         .padding(20.dp),
                 ) {
-                    Text("Total Fees Paid", color = Color.White)
-                    Text("Fee Balance", color = Color.White)
-                    Text("Last payment was made on:", color = Color.White)
+                    Text("Total Fees Paid", color = MaterialTheme.colors.onPrimary)
+                    Text("Fee Balance", color = MaterialTheme.colors.onPrimary)
+                    Text("Last payment was made on", color = MaterialTheme.colors.onPrimary)
                 }
             }
 
@@ -74,7 +73,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
                         CardAction(
                             "Transactions",
                             R.drawable.transactions,
-                            R.color.blue,
+                            true,
                             Routes.Transactions.name
                         ),
                         CardAction(
@@ -89,7 +88,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
                         CardAction(
                             "Students",
                             R.drawable.students,
-                            R.color.blue,
+                            true,
                             route = Routes.Students.name
                         ),
                     )
@@ -100,7 +99,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
                             .padding(4.dp)
                             .clickable { onNavigate(item.route) },
                         shape = RoundedCornerShape(10.dp),
-                        backgroundColor = colorResource(item.backgroundColorResourceId),
+                        backgroundColor = if(item.backgroundColorPrimary) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
                     ) {
                         Column(
                             modifier = Modifier.padding(vertical = 60.dp),
@@ -120,9 +119,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
 
                             Text(
                                 item.title,
-                                color = if (item.backgroundColorResourceId == R.color.blue) Color.White else colorResource(
-                                    R.color.blue
-                                ),
+                                color = if (item.backgroundColorPrimary) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primary,
                                 fontWeight = FontWeight.Bold
                             )
                         }
