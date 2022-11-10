@@ -23,11 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.karo.R
 import com.example.karo.Routes
 import com.example.karo.components.MainViewModel
+import com.example.karo.doNothing
 
 data class CardAction(
     val title: String,
@@ -37,7 +36,7 @@ data class CardAction(
 )
 
 @Composable
-fun HomePage(navController: NavController, viewModel: MainViewModel) {
+fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
     viewModel.setCurrentScreen(Routes.Home)
 
     Box(modifier = Modifier.padding(20.dp)) {
@@ -99,7 +98,7 @@ fun HomePage(navController: NavController, viewModel: MainViewModel) {
                         elevation = 4.dp,
                         modifier = Modifier
                             .padding(4.dp)
-                            .clickable { navController.navigate(item.route) },
+                            .clickable { onNavigate(item.route) },
                         shape = RoundedCornerShape(10.dp),
                         backgroundColor = colorResource(item.backgroundColorResourceId),
                     ) {
@@ -137,5 +136,5 @@ fun HomePage(navController: NavController, viewModel: MainViewModel) {
 @Preview
 @Composable
 fun HomePagePreview() {
-    HomePage(rememberNavController(),  viewModel = viewModel())
+    HomePage({ doNothing() }, viewModel = viewModel())
 }

@@ -15,7 +15,12 @@ fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
         navController as NavHostController,
         startDestination = Routes.Home.name
     ) {
-        composable(Routes.Home.name) { HomePage(navController, viewModel = viewModel) }
+        composable(Routes.Home.name) {
+            HomePage(
+                { route -> navController.navigate(route) },
+                viewModel = viewModel
+            )
+        }
         composable(Routes.ManageFees.name) { ManageFeePlanPage(viewModel = viewModel) }
         composable(Routes.FeePayment.name) { FeePaymentPage(viewModel = viewModel) }
         composable(Routes.Transactions.name) { TransactionsPage(viewModel = viewModel) }
