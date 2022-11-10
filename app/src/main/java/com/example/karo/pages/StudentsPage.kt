@@ -13,7 +13,7 @@ import com.example.karo.Routes
 import com.example.karo.components.MainViewModel
 
 @Composable
-fun ProfilePage(viewModel: MainViewModel) {
+fun StudentsPage(viewModel: MainViewModel) {
     viewModel.setCurrentScreen(Routes.Home)
 
     Column(
@@ -21,7 +21,7 @@ fun ProfilePage(viewModel: MainViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PageTitle(title = "Profile")
-        Text(text = "ProfilePage.", style = MaterialTheme.typography.bodyLarge)
+        PageTitle(title = "Students")
+        Text(text = "Students Page.", style = MaterialTheme.typography.bodyLarge)
     }
 }

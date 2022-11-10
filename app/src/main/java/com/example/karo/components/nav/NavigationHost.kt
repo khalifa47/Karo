@@ -19,7 +19,7 @@ fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
         composable(Routes.ManageFees.name) { ManageFeePlanPage(viewModel = viewModel) }
         composable(Routes.FeePayment.name) { FeePaymentPage(viewModel = viewModel) }
         composable(Routes.Transactions.name) { TransactionsPage(viewModel = viewModel) }
-        composable(Routes.Students.name) { ProfilePage(viewModel = viewModel) }
+        composable(Routes.Students.name) { StudentsPage(viewModel = viewModel) }
         composable(Routes.Profile.name) { ProfilePage(viewModel = viewModel) }
         composable(Routes.Settings.name) { SettingsPage(viewModel = viewModel) }
     }
