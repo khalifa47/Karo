@@ -1,6 +1,7 @@
 package com.example.karo.pages
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -17,10 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.karo.R
 import com.example.karo.Routes
 import com.example.karo.components.MainViewModel
@@ -28,11 +32,12 @@ import com.example.karo.components.MainViewModel
 data class CardAction(
     val title: String,
     val image: Int,
-    val backgroundColorResourceId: Int = R.color.white
+    val backgroundColorResourceId: Int = R.color.white,
+    val route: String = Routes.Home.name
 )
 
 @Composable
-fun HomePage(viewModel: MainViewModel) {
+fun HomePage(navController: NavController, viewModel: MainViewModel) {
     viewModel.setCurrentScreen(Routes.Home)
 
     Box(modifier = Modifier.padding(20.dp)) {
@@ -50,11 +55,11 @@ fun HomePage(viewModel: MainViewModel) {
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(20.dp),
                 ) {
-                    Text("Total Fees Paid")
-                    Text("Fee Balance")
-                    Text("Last payment was made on:")
+                    Text("Total Fees Paid", color = Color.White)
+                    Text("Fee Balance", color = Color.White)
+                    Text("Last payment was made on:", color = Color.White)
                 }
             }
 
@@ -67,15 +72,34 @@ fun HomePage(viewModel: MainViewModel) {
             ) {
                 items(
                     listOf(
-                        CardAction("Transactions", R.drawable.transactions, R.color.blue),
-                        CardAction("Fee Plans", R.drawable.fee_plans),
-                        CardAction("Payments", R.drawable.payment_info),
-                        CardAction("Students", R.drawable.students, R.color.blue),
+                        CardAction(
+                            "Transactions",
+                            R.drawable.transactions,
+                            R.color.blue,
+                            Routes.Transactions.name
+                        ),
+                        CardAction(
+                            "Fee Plans",
+                            R.drawable.fee_plans,
+                            route = Routes.ManageFees.name
+                        ),
+                        CardAction(
+                            "Payments",
+                            R.drawable.payment_info
+                        ),
+                        CardAction(
+                            "Students",
+                            R.drawable.students,
+                            R.color.blue,
+                            route = Routes.Students.name
+                        ),
                     )
                 ) { item ->
                     Card(
                         elevation = 4.dp,
-                        modifier = Modifier.padding(4.dp),
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .clickable { navController.navigate(item.route) },
                         shape = RoundedCornerShape(10.dp),
                         backgroundColor = colorResource(item.backgroundColorResourceId),
                     ) {
@@ -92,7 +116,16 @@ fun HomePage(viewModel: MainViewModel) {
                                     .size(70.dp)
                                     .clip(CircleShape)
                             )
-                            Text(item.title)
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Text(
+                                item.title,
+                                color = if (item.backgroundColorResourceId == R.color.blue) Color.White else colorResource(
+                                    R.color.blue
+                                ),
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
@@ -104,5 +137,5 @@ fun HomePage(viewModel: MainViewModel) {
 @Preview
 @Composable
 fun HomePagePreview() {
-    HomePage(viewModel = viewModel())
+    HomePage(rememberNavController(),  viewModel = viewModel())
 }
