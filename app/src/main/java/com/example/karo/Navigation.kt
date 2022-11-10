@@ -7,23 +7,22 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
-/*
-@Composable
+/*@Composable
 fun Navigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Routes.Settings.route
+    startDestination: String = Routes.Settings.name
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(Routes.FeePayment.route){
-            FeePayment(onNavigateToTransactions = { navController.navigate(Routes.Transactions.route) })
+        composable(Routes.FeePayment.name) {
+            FeePayment(onNavigateToTransactions = { navController.navigate(Routes.Transactions.name) })
         }
-        composable(Routes.Transactions.route){
-            Transactions(onNavigateToPayments = { navController.navigate(Routes.FeePayment.route) })
+        composable(Routes.Transactions.name) {
+            Transactions(onNavigateToPayments = { navController.navigate(Routes.FeePayment.name) })
         }
     }
 }*/
