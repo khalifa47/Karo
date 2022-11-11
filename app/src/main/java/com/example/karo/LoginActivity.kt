@@ -51,7 +51,6 @@ class LoginActivity : ComponentActivity() {
                 val isValidPassword by derivedStateOf {
                     password.length > 7
                 }
-
                 var isPasswordVisible by remember {
                     mutableStateOf(false)
                 }
