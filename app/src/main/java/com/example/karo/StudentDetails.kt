@@ -20,15 +20,15 @@ import androidx.compose.ui.unit.dp
 import com.example.karo.ui.theme.KaroTheme
 
 @Composable
-fun StudentDetails(){
+fun StudentDetails() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
-    ) {
-        item(){
+        ) {
+        item {
             Text(
                 text = "Student Details",
                 style = MaterialTheme.typography.h5,
@@ -36,7 +36,7 @@ fun StudentDetails(){
                 color = Color.Blue
             )
         }
-        item(){
+        item {
             Card(
                 elevation = 4.dp,
                 backgroundColor = Color.Blue
@@ -46,7 +46,7 @@ fun StudentDetails(){
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Row() {
+                    Row {
                         Text("Add Student", fontWeight = FontWeight.W500, color = Color.White)
 
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -57,38 +57,36 @@ fun StudentDetails(){
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
+                }
+            }
+        }
+        item {
+            Card(
+                elevation = 4.dp,
+            ) {
+                Column(modifier = Modifier.padding(30.dp)) {
+                    Row {
+                        Text("View/Edit      ", fontWeight = FontWeight.W500, color = Color.Black)
+
+
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+
+                        Icon(
+                            Icons.Outlined.Edit,
+                            contentDescription = "",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                    }
+                    Text("Student Details", fontWeight = FontWeight.W500, color = Color.Black)
 
                 }
 
             }
         }
-        item(){
-        Card(
-            elevation = 4.dp,
-        ) {
-            Column(modifier = Modifier.padding(30.dp)) {
-                Row() {
-                    Text("View/Edit      ", fontWeight = FontWeight.W500, color = Color.Black)
 
 
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-
-                    Icon(
-                        Icons.Outlined.Edit,
-                        contentDescription = "",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                }
-                Text("Student Details", fontWeight = FontWeight.W500, color = Color.Black)
-
-            }
-
-        }
-        }
-
-
-        }
     }
+}
 
 
 @Preview(showBackground = true)

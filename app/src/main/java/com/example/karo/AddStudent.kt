@@ -61,7 +61,7 @@ fun ShowForm(){
     val scrollState = rememberScrollState()
 
     var admin_no by rememberSaveable{ mutableStateOf("")}
-    var fname by rememberSaveable{ mutableStateOf("")}
+    val fname by rememberSaveable{ mutableStateOf("")}
     var lname by rememberSaveable{ mutableStateOf("")}
     var dob by rememberSaveable{ mutableStateOf("")}
     var address by rememberSaveable{ mutableStateOf("")}
