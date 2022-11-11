@@ -2,6 +2,7 @@ package com.example.karo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,14 +30,36 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.karo.ui.theme.KaroTheme
+import com.example.karo.utils.Helpers
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
 class LoginActivity : ComponentActivity() {
+    private val auth by lazy {
+        Firebase.auth
+    }
+
+    companion object {
+        val TAG: String = LoginActivity::class.java.simpleName
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fun login() {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+        fun login(email: String, password: String): Task<AuthResult> {
+            return auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    } else {
+                        Helpers.showToast(this, "Invalid Credentials!")
+                        Log.w(TAG, it.exception)
+                    }
+                }
         }
 
         setContent {
@@ -44,6 +67,7 @@ class LoginActivity : ComponentActivity() {
                 var email by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
                 val focusManager = LocalFocusManager.current
+                var isLoading by remember { mutableStateOf(false) }
 
                 val isValidEmail by derivedStateOf {
                     Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -137,7 +161,7 @@ class LoginActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        TextButton({ login() }) {
+                        TextButton({ doNothing() }) {
                             Text(
                                 "Forgot Password?",
                                 color = MaterialTheme.colors.primary,
@@ -147,14 +171,20 @@ class LoginActivity : ComponentActivity() {
                         }
                     }
 
-                    Button(
-                        onClick = {},
-                        enabled = isValidEmail && isValidPassword,
-                        modifier = Modifier
-                            .padding(16.dp),
-                        colors = ButtonDefaults.buttonColors(),
-                    ) {
-                        Text("Sign In", fontWeight = FontWeight.Bold)
+                    if (isLoading) {
+                        CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                    } else {
+                        Button(
+                            onClick = {
+                                isLoading = true
+                                login(email, password).addOnCompleteListener { isLoading = false }
+                            },
+                            enabled = isValidEmail && isValidPassword,
+                            modifier = Modifier.padding(16.dp),
+                            colors = ButtonDefaults.buttonColors(),
+                        ) {
+                            Text("Sign In", fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }
