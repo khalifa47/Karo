@@ -1,7 +1,7 @@
 package com.example.karo
 
 sealed class Routes(val name: String) {
-    object Splash : Routes("splash")
+    object Login : Routes("login")
 
     object Home : Routes("home")
     object Profile : Routes("profile")

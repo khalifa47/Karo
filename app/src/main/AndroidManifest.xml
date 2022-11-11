@@ -15,7 +15,7 @@
         <activity
             android:name=".SplashScreen"
             android:exported="true"
-            android:theme="@style/Theme.Karo">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
     </application>
 

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,16 +20,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.karo.ui.theme.KaroTheme
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 
 class SplashScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
 
         setContent {
             KaroTheme {
@@ -39,7 +34,11 @@ class SplashScreen : ComponentActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
+            val currentUser = FirebaseAuth.getInstance().currentUser
+
+            val intentClass =
+                if (currentUser == null) LoginActivity::class.java else MainActivity::class.java
+            val intent = Intent(this, intentClass)
             startActivity(intent)
             finish()
         }, 3000)
@@ -61,7 +60,7 @@ fun Splash() {
                     OvershootInterpolator(4f).getInterpolation(it)
                 })
         )
-        delay(3000L)
+        delay(1000L)
     }
 
     Surface(
