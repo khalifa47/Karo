@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.karo.Routes
+import com.example.karo.SplashScreen
 import com.example.karo.components.MainViewModel
 import com.example.karo.pages.*
 
