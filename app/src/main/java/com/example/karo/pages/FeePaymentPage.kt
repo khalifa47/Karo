@@ -10,9 +10,5 @@ import com.example.karo.components.MainViewModel
 @Composable
 fun FeePaymentPage(viewModel: MainViewModel) {
     viewModel.setCurrentScreen(Routes.Home)
-
-    Column {
-        PageTitle(title = "Fee Payment")
-        FeePaymentForm()
-    }
+    FeePaymentForm()
 }

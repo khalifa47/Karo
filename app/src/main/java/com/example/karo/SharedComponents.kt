@@ -30,34 +30,34 @@ fun ConfirmButton(label: String, action: () -> Unit) {
     }
 }
 
-@Composable
-fun PageTitle(title: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .background(MaterialTheme.colors.primaryVariant)
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 8.dp, start = 2.dp, end = 2.dp)
-    ) {
-        IconButton(modifier = Modifier.
-        then(Modifier.size(24.dp)),
-            onClick = { }) {
-            Icon(
-                Icons.Outlined.ArrowBack,
-                "Back Button"
-            )
-        }
-
-        Text(text = title)
-
-        IconButton(modifier = Modifier.
-        then(Modifier.size(24.dp)),
-            onClick = { }) {
-            Icon(
-                Icons.Outlined.Settings,
-                "Theme Button"
-            )
-        }
-    }
-}
+//@Composable
+//fun PageTitle(title: String) {
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically,
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        modifier = Modifier
+//            .background(MaterialTheme.colors.primaryVariant)
+//            .fillMaxWidth()
+//            .padding(top = 8.dp, bottom = 8.dp, start = 2.dp, end = 2.dp)
+//    ) {
+//        IconButton(modifier = Modifier.
+//        then(Modifier.size(24.dp)),
+//            onClick = { }) {
+//            Icon(
+//                Icons.Outlined.ArrowBack,
+//                "Back Button"
+//            )
+//        }
+//
+//        Text(text = title)
+//
+//        IconButton(modifier = Modifier.
+//        then(Modifier.size(24.dp)),
+//            onClick = { }) {
+//            Icon(
+//                Icons.Outlined.Settings,
+//                "Theme Button"
+//            )
+//        }
+//    }
+//}
