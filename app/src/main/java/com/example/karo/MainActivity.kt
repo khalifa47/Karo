@@ -1,5 +1,6 @@
 package com.example.karo
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import com.example.karo.components.nav.DrawerHeader
 import com.example.karo.components.nav.MenuItem
 import com.example.karo.components.nav.NavigationHost
 import com.example.karo.ui.theme.KaroTheme
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -112,8 +114,13 @@ class MainActivity : ComponentActivity() {
                                 scope.launch {
                                     scaffoldState.drawerState.close()
                                 }
-                                navController.navigate(it.id) {
-                                    launchSingleTop = true
+
+                                if (it.id == "logout") {
+                                    logout()
+                                } else {
+                                    navController.navigate(it.id) {
+                                        launchSingleTop = true
+                                    }
                                 }
 
                                 println("Clicked on ${it.title}")
@@ -127,5 +134,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }
