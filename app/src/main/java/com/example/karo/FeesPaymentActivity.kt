@@ -15,7 +15,6 @@ import com.example.karo.ui.theme.KaroTheme
 @Composable
 fun FeePayment(onNavigateToTransactions: () -> Unit) {
     Column {
-        PageTitle(title = "Fee Payment")
         FeePaymentForm()
         Button(onClick = onNavigateToTransactions) {
             Text(text = "Navigate to Transactions")
