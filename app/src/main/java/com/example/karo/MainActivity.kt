@@ -54,38 +54,38 @@ class MainActivity : ComponentActivity() {
                         DrawerBody(
                             items = listOf(
                                 MenuItem(
-                                    id = "home",
+                                    id = Routes.Home.name,
                                     title = "Home",
                                     contentDescription = "Go to home screen",
                                     icon = Icons.Default.Home
                                 ),
                                 MenuItem(
-                                    id = "manage_fees",
+                                    id = Routes.ManageFees.name,
                                     title = "Manage Fees",
                                     contentDescription = "Manage fees",
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_money)
                                 ),
                                 MenuItem(
-                                    id = "fee_payment",
+                                    id = Routes.ManageFees.name,
                                     title = "Fee Payment",
                                     contentDescription = "Pay fees",
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_money)
                                 ),
                                 MenuItem(
-                                    id = "transactions",
+                                    id = Routes.Transactions.name,
                                     title = "Transactions",
                                     contentDescription = "View transactions",
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_sync)
                                 ),
                                 MenuItem(
-                                    id = "students",
+                                    id = Routes.Transactions.name,
                                     title = "Students",
                                     contentDescription = "Go to students screen",
                                     icon = Icons.Default.Settings,
                                     drawer = true
                                 ),
                                 MenuItem(
-                                    id = "profile",
+                                    id = Routes.Profile.name,
                                     title = "Profile",
                                     contentDescription = "View profile",
                                     icon = Icons.Default.Person
@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                                     drawer = true
                                 ),
                                 MenuItem(
-                                    id = "settings",
+                                    id = Routes.Settings.name,
                                     title = "Settings",
                                     contentDescription = "View settings",
                                     icon = Icons.Default.Settings
