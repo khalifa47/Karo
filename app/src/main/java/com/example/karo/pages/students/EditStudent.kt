@@ -1,4 +1,4 @@
-package com.example.karo
+package com.example.karo.pages.students
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -42,7 +42,7 @@ fun EditDetails() {
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
-        item() {
+        item {
             Text(
                 text = "View/Edit Student Details",
                 style = MaterialTheme.typography.h5,
@@ -50,7 +50,7 @@ fun EditDetails() {
                 color = Color.Blue
             )
         }
-        item() {
+        item {
             Card(
                 elevation = 4.dp,
                 backgroundColor = Color.Blue
@@ -60,7 +60,7 @@ fun EditDetails() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Row() {
+                    Row {
                         Icon(
                             Icons.Outlined.Search,
                             contentDescription = "",
@@ -74,7 +74,7 @@ fun EditDetails() {
                             color = Color.White
                         )
                     }
-                    Row() {
+                    Row {
                         Icon(
                             Icons.Outlined.Search,
                             contentDescription = "",

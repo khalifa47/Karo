@@ -64,15 +64,11 @@ fun StudentsPage(viewModel: MainViewModel) {
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
-
                 }
-
             }
         }
         item {
-            Card(
-                elevation = 4.dp,
-            ) {
+            Card(elevation = 4.dp,) {
                 Column(modifier = Modifier.padding(30.dp)) {
                     Row {
                         androidx.compose.material.Text(

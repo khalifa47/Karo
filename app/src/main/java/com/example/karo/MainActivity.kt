@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_sync)
                                 ),
                                 MenuItem(
-                                    id = Routes.Transactions.name,
+                                    id = Routes.Students.name,
                                     title = "Students",
                                     contentDescription = "Go to students screen",
                                     icon = Icons.Default.Settings,
