@@ -47,9 +47,7 @@ fun ListItem(name: String, admNo: String) {
     Surface(
         color = MaterialTheme.colors.primary, modifier = Modifier
             .padding(4.dp, 2.dp)
-            .clip(
-                RoundedCornerShape(10.dp)
-            )
+            .clip(RoundedCornerShape(10.dp))
     ) {
         Column(
             modifier = Modifier
