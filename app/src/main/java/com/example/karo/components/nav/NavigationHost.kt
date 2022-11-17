@@ -20,7 +20,12 @@ fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
         composable(Routes.Home.name) {
             HomePage({ route -> navController.navigate(route) }, viewModel)
         }
-        composable(Routes.ManageFees.name) { ManageFeePlanPage(viewModel = viewModel) }
+        composable(Routes.ManageFees.name) {
+            ManageFeePlanPage(
+                it.arguments?.getString("id") ?: "1",
+                viewModel = viewModel
+            )
+        }
         composable(Routes.FeePayment.name) { FeePaymentPage(viewModel = viewModel) }
         composable(Routes.Transactions.name) { TransactionsPage(viewModel = viewModel) }
         composable(Routes.Students.name) { StudentsIndex(viewModel = viewModel) }
