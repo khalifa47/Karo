@@ -51,13 +51,7 @@ fun AppScaffold(onLogout: () -> Unit) {
                         icon = Icons.Default.Home
                     ),
                     MenuItem(
-                        id = Routes.ManageFees.name,
-                        title = "Manage Fees",
-                        contentDescription = "Manage fees",
-                        icon = ImageVector.vectorResource(id = R.drawable.ic_money)
-                    ),
-                    MenuItem(
-                        id = Routes.ManageFees.name,
+                        id = Routes.FeePayment.name,
                         title = "Fee Payment",
                         contentDescription = "Pay fees",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_money)
@@ -114,7 +108,7 @@ fun AppScaffold(onLogout: () -> Unit) {
                         }
                     }
 
-                    println("Clicked on ${it.title}")
+                    println("Clicked on ========================== ${it.title}")
                 }
             )
         }
