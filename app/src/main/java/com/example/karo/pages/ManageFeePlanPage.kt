@@ -34,7 +34,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 
 @Composable
-fun ManageFeePlanPage(viewModel: MainViewModel) {
+fun ManageFeePlanPage(id: String, viewModel: MainViewModel) {
     viewModel.setCurrentScreen(Routes.Home)
 
     val focusManager = LocalFocusManager.current
@@ -53,7 +53,9 @@ fun ManageFeePlanPage(viewModel: MainViewModel) {
 
     if (docId.isNotEmpty()) isUpdate = true
 
-    Box(modifier = Modifier.padding(20.dp).fillMaxHeight(), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier
+        .padding(20.dp)
+        .fillMaxHeight(), contentAlignment = Alignment.Center) {
         Column {
             Card(
                 elevation = 4.dp,

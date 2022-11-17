@@ -1,4 +1,4 @@
-package com.example.karo
+package com.example.karo.pages.students
 
 
 import androidx.compose.foundation.layout.*

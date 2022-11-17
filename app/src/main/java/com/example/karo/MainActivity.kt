@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.karo.components.AppBar
+import com.example.karo.components.AppScaffold
 import com.example.karo.components.MainViewModel
 import com.example.karo.components.nav.DrawerBody
 import com.example.karo.components.nav.DrawerHeader
@@ -32,113 +33,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             KaroTheme {
-                val scope = rememberCoroutineScope()
-                val viewModel: MainViewModel = viewModel()
-                val scaffoldState = rememberScaffoldState()
-                val navController = rememberNavController()
-
-                Scaffold(
-                    scaffoldState = scaffoldState,
-                    topBar = {
-                        AppBar(
-                            onNavigationIconClick = {
-                                scope.launch {
-                                    scaffoldState.drawerState.open()
-                                }
-                            }
-                        )
-                    },
-                    drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-                    drawerContent = {
-                        DrawerHeader()
-                        DrawerBody(
-                            items = listOf(
-                                MenuItem(
-                                    id = Routes.Home.name,
-                                    title = "Home",
-                                    contentDescription = "Go to home screen",
-                                    icon = Icons.Default.Home
-                                ),
-                                MenuItem(
-                                    id = Routes.ManageFees.name,
-                                    title = "Manage Fees",
-                                    contentDescription = "Manage fees",
-                                    icon = ImageVector.vectorResource(id = R.drawable.ic_money)
-                                ),
-                                MenuItem(
-                                    id = Routes.ManageFees.name,
-                                    title = "Fee Payment",
-                                    contentDescription = "Pay fees",
-                                    icon = ImageVector.vectorResource(id = R.drawable.ic_money)
-                                ),
-                                MenuItem(
-                                    id = Routes.Transactions.name,
-                                    title = "Transactions",
-                                    contentDescription = "View transactions",
-                                    icon = ImageVector.vectorResource(id = R.drawable.ic_sync)
-                                ),
-                                MenuItem(
-                                    id = Routes.Transactions.name,
-                                    title = "Students",
-                                    contentDescription = "Go to students screen",
-                                    icon = Icons.Default.Settings,
-                                    drawer = true
-                                ),
-                                MenuItem(
-                                    id = Routes.Profile.name,
-                                    title = "Profile",
-                                    contentDescription = "View profile",
-                                    icon = Icons.Default.Person
-                                ),
-                                MenuItem(
-                                    id = "share",
-                                    title = "Share",
-                                    contentDescription = "Share",
-                                    icon = Icons.Default.Share,
-                                    drawer = true
-                                ),
-                                MenuItem(
-                                    id = Routes.Settings.name,
-                                    title = "Settings",
-                                    contentDescription = "View settings",
-                                    icon = Icons.Default.Settings
-                                ),
-                                MenuItem(
-                                    id = "logout",
-                                    title = "Sign Out",
-                                    contentDescription = "Sign Out",
-                                    icon = Icons.Default.ExitToApp
-                                ),
-                            ),
-                            onItemClick = {
-                                scope.launch {
-                                    scaffoldState.drawerState.close()
-                                }
-
-                                if (it.id == "logout") {
-                                    logout()
-                                } else {
-                                    navController.navigate(it.id) {
-                                        launchSingleTop = true
-                                    }
-                                }
-
-                                println("Clicked on ${it.title}")
-                            }
-                        )
-                    }
-                ) {
-                    Column(modifier = Modifier.padding(it)) {
-                        NavigationHost(navController = navController, viewModel = viewModel)
-                    }
+                AppScaffold {
+                    FirebaseAuth.getInstance().signOut()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
                 }
             }
         }
-    }
-
-    private fun logout() {
-        FirebaseAuth.getInstance().signOut()
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
     }
 }
