@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.karo.PageTitle
 import com.example.karo.Routes
 import com.example.karo.SampleData
 import com.example.karo.components.MainViewModel
@@ -30,11 +29,7 @@ data class Transaction(
 @Composable
 fun TransactionsPage(viewModel: MainViewModel) {
     viewModel.setCurrentScreen(Routes.Home)
-
-    Column {
-        PageTitle(title = "Transactions")
-        TransactionList(transactions = SampleData.transactionSample)
-    }
+    TransactionList(transactions = SampleData.transactionSample)
 }
 
 @Composable
