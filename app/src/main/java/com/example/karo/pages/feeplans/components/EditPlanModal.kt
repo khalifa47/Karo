@@ -125,6 +125,7 @@ fun EditPlanModal(onSave: (plan: FeePlan) -> Unit, plan: FeePlan) {
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
+
                     Text(
                         "Student should pay KSH " +
                                 "${amount.ifBlank { "___" }} per " +
