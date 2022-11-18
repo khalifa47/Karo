@@ -48,16 +48,33 @@ class FeePlansViewModel : ViewModel() {
         }.collect { response -> feePlansResponse = response }
     }
 
-    fun createFeePlan(studentId: String, feePlan: FeePlan) = viewModelScope.launch {
+    fun createFeePlan(studentId: String, plan: FeePlan) = viewModelScope.launch {
         addFeePlanResponse = Response.Loading
         addFeePlanResponse = try {
-            feePlan.id = Firebase.firestore.collection("students/${studentId}/plans").document().id
+            plan.id = Firebase.firestore.collection("students/${studentId}/plans").document().id
 
-            Firebase.firestore.collection("students/${studentId}/plans").document(studentId)
-                .set(feePlan)
+            Firebase.firestore.collection("students/${studentId}/plans").document(plan.id!!)
+                .set(plan)
                 .await()
 
-            Response.Failure(Exception("Student ID missing!"))
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    fun updateFeePlan(studentId: String, plan: FeePlan) = viewModelScope.launch {
+        addFeePlanResponse = Response.Loading
+        addFeePlanResponse = try {
+            plan.id?.let {
+                Firebase.firestore.collection("students/${studentId}/plans").document(it)
+                    .set(plan)
+                    .await()
+
+                Response.Success(true)
+            }
+
+            Response.Failure(Exception("Student ID not set."))
         } catch (e: Exception) {
             Response.Failure(e)
         }

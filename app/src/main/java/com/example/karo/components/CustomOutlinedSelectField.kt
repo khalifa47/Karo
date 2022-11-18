@@ -1,14 +1,10 @@
 package com.example.karo.components
 
-import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -21,6 +17,8 @@ fun CustomOutlinedSelectField(
     errorMessage: String = "",
 ) {
     var selectedItem by remember { mutableStateOf(value) }
+
+    if (value.isNotEmpty()) selectedItem = value
 
     var expanded by remember { mutableStateOf(false) }
 

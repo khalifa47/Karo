@@ -26,9 +26,7 @@ import com.example.karo.components.CustomOutlinedTextField
 import com.example.karo.models.FeePlan
 
 @Composable
-fun UpsertPlanModal(onSave: (plan: FeePlan) -> Unit, plan: FeePlan) {
-    println("PLAN: ======================================================= $plan")
-
+fun CreatePlanModal(onSave: (plan: FeePlan) -> Unit) {
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 
@@ -36,11 +34,6 @@ fun UpsertPlanModal(onSave: (plan: FeePlan) -> Unit, plan: FeePlan) {
     var semester by rememberSaveable { mutableStateOf("") }
     var amount by rememberSaveable { mutableStateOf("") }
     var frequency by rememberSaveable { mutableStateOf("") }
-
-    if (plan.year?.isNotEmpty() == true) year = plan.year.toString()
-    if (plan.semester?.isNotEmpty() == true) semester = plan.semester.toString()
-    if (plan.amount?.isNotEmpty() == true) amount = plan.amount.toString()
-    if (plan.frequency?.isNotEmpty() == true) frequency = plan.frequency.toString()
 
     val isValidYear by remember { derivedStateOf { year.isNotBlank() } }
     val isValidSemester by remember { derivedStateOf { semester.isNotBlank() } }
@@ -107,7 +100,7 @@ fun UpsertPlanModal(onSave: (plan: FeePlan) -> Unit, plan: FeePlan) {
                 errorMessage = invalidAmountMsg,
                 leadingIconImageVector = ImageVector.vectorResource(id = R.drawable.ic_money),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
+                    keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
@@ -152,7 +145,7 @@ fun UpsertPlanModal(onSave: (plan: FeePlan) -> Unit, plan: FeePlan) {
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(),
             ) {
-                Text("Save", fontWeight = FontWeight.Bold)
+                Text("Create", fontWeight = FontWeight.Bold)
             }
         }
     }

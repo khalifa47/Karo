@@ -12,12 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.karo.models.FeePlan
-import com.example.karo.pages.feeplans.components.UpsertPlanModal
+import com.example.karo.pages.feeplans.components.CreatePlanModal
+import com.example.karo.pages.feeplans.components.EditPlanModal
 import com.example.karo.ui.theme.KaroTheme
 import com.example.karo.utils.Helpers
 import kotlinx.coroutines.launch
@@ -28,11 +30,15 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
     val scope = rememberCoroutineScope()
 
     var planToEdit by remember { mutableStateOf(FeePlan()) }
+    val isUpdate = planToEdit.id?.isNotEmpty() == true
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                { scope.launch { drawerState.open() } },
+                {
+                    planToEdit = FeePlan()
+                    scope.launch { drawerState.open() }
+                },
                 backgroundColor = MaterialTheme.colors.primary
             ) { Icon(Icons.Default.Add, "Add a plan") }
         }
@@ -42,12 +48,16 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
 
             FeePlans({ plans ->
                 ModalDrawer({
-                    UpsertPlanModal(onSave = { plan ->
-                        viewModel.createFeePlan(
-                            studentId,
-                            plan
-                        )
-                    }, plan = planToEdit)
+                    if (isUpdate) EditPlanModal(
+                        onSave = { plan ->
+                            viewModel.updateFeePlan(studentId, plan)
+                            scope.launch { drawerState.close() }
+                        },
+                        plan = planToEdit
+                    ) else CreatePlanModal(onSave = { plan ->
+                        viewModel.createFeePlan(studentId, plan)
+                        scope.launch { drawerState.close() }
+                    })
                 }, drawerState = drawerState) {
                     if (plans.isEmpty()) {
                         Box(
@@ -114,7 +124,8 @@ fun ListItem(plan: FeePlan, onEdit: (FeePlan) -> Unit) {
                     Column {
                         Text("Amount to pay per ${plan.frequency} is:")
                         Text(
-                            Helpers.currencyFormat(plan.amount) ?: "N/A",
+                            text = Helpers.currencyFormat(plan.amount) ?: "N/A",
+                            color = Color.Green,
                             style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.ExtraBold)
                         )
                     }
