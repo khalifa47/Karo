@@ -7,11 +7,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -25,9 +22,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.karo.R
+import com.example.karo.components.CustomOutlinedSelectField
 import com.example.karo.components.CustomOutlinedTextField
 import com.example.karo.models.FeePlan
-import com.example.karo.pages.SelectInput
+import com.example.karo.utils.Helpers
 
 @Composable
 fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
@@ -40,24 +38,15 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
     var amount by rememberSaveable { mutableStateOf("") }
     var frequency by rememberSaveable { mutableStateOf("") }
 
-    var isValidYear by rememberSaveable { mutableStateOf(true) }
-    var isValidSemester by rememberSaveable { mutableStateOf(true) }
-    var isValidAmount by rememberSaveable { mutableStateOf(true) }
-    var isValidFrequency by rememberSaveable { mutableStateOf(true) }
+    val isValidYear by remember { derivedStateOf { year.isNotBlank() } }
+    val isValidSemester by remember { derivedStateOf { semester.isNotBlank() } }
+    val isValidAmount by remember { derivedStateOf { amount.isNotBlank() } }
+    val isValidFrequency by remember { derivedStateOf { frequency.isNotBlank() } }
 
     val invalidYearMsg = "Year is required."
     val invalidSemesterMsg = "Semester is required."
     val invalidAmountMsg = "Amount is required."
     val invalidFrequencyMsg = "Frequency is required."
-
-    fun validate(year: String, semester: String, amount: String, frequency: String): Boolean {
-        isValidYear = year.isNotBlank()
-        isValidSemester = semester.isNotBlank()
-        isValidAmount = semester.isNotBlank()
-        isValidFrequency = frequency.isNotBlank()
-
-        return isValidYear && isValidSemester && isValidAmount && isValidFrequency
-    }
 
     Box(
         modifier = Modifier
@@ -79,18 +68,27 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            SelectInput(
+            CustomOutlinedSelectField(
+                label = "Year",
                 value = year,
-                "Year",
-                listOf("1", "2", "3", "4"),
-                onValueChange = { year = it }
+                onValueChange = { year = it },
+                options = listOf("1", "2", "3", "4"),
             )
 
-            SelectInput(
+            CustomOutlinedSelectField(
+                label = "Semester",
                 value = semester,
-                "Semester",
-                listOf("1", "2"),
-                onValueChange = { semester = it }
+                onValueChange = { semester = it },
+                options = listOf("1", "2"),
+            )
+
+            CustomOutlinedSelectField(
+                value = frequency,
+                label = "Should Pay Every",
+                onValueChange = { frequency = it },
+                options = listOf("Week", "Month", "Quarter", "Semester", "Year"),
+                showError = !isValidFrequency,
+                errorMessage = invalidFrequencyMsg,
             )
 
             CustomOutlinedTextField(
@@ -107,13 +105,6 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
-            )
-
-            SelectInput(
-                value = frequency,
-                "Should Pay Every",
-                listOf("Week", "Month", "Quarter", "Semester", "Year"),
-                onValueChange = { frequency = it }
             )
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -144,15 +135,16 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            TextButton(
-                { onCreate(FeePlan(null, year, semester, amount, frequency)) },
-//              enabled = isValidEmail && isValidPassword,
+            Button(
+                onClick = { onCreate(FeePlan(null, year, semester, amount, frequency)) },
+                enabled = isValidYear && isValidSemester && isValidAmount && isValidFrequency,
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(20.dp)
+                    .fillMaxWidth(.9f)
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(),
             ) {
-                Text("Update", fontWeight = FontWeight.Bold)
+                Text("Save", fontWeight = FontWeight.Bold)
             }
         }
     }

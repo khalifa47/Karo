@@ -5,10 +5,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +19,7 @@ fun CustomOutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String = "",
-    leadingIconImageVector: ImageVector,
+    leadingIconImageVector: ImageVector = Icons.Default.Edit,
     leadingIconDescription: String = "",
     isPasswordField: Boolean = false,
     isPasswordVisible: Boolean = false,
@@ -30,7 +27,9 @@ fun CustomOutlinedTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     showError: Boolean = false,
-    errorMessage: String = ""
+    errorMessage: String = "",
+    readOnly: Boolean = false,
+    trailingIcon: @Composable() (() -> Unit)? = {}
 ) {
     Column(Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterHorizontally) {
         OutlinedTextField(
@@ -40,6 +39,7 @@ fun CustomOutlinedTextField(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp),
             label = { Text(label) },
+            readOnly = readOnly,
             leadingIcon = {
                 Icon(
                     imageVector = leadingIconImageVector,
@@ -48,7 +48,7 @@ fun CustomOutlinedTextField(
                 )
             },
             isError = showError,
-            trailingIcon = {
+            trailingIcon = trailingIcon ?: {
                 if (showError && !isPasswordField) Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "Show error icon"
