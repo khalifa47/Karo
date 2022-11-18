@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,11 +24,11 @@ import com.example.karo.R
 import com.example.karo.components.CustomOutlinedSelectField
 import com.example.karo.components.CustomOutlinedTextField
 import com.example.karo.models.FeePlan
-import com.example.karo.utils.Helpers
 
 @Composable
-fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
-    val context = LocalContext.current
+fun UpsertPlanModal(onSave: (plan: FeePlan) -> Unit, plan: FeePlan) {
+    println("PLAN: ======================================================= $plan")
+
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 
@@ -37,6 +36,11 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
     var semester by rememberSaveable { mutableStateOf("") }
     var amount by rememberSaveable { mutableStateOf("") }
     var frequency by rememberSaveable { mutableStateOf("") }
+
+    if (plan.year?.isNotEmpty() == true) year = plan.year.toString()
+    if (plan.semester?.isNotEmpty() == true) semester = plan.semester.toString()
+    if (plan.amount?.isNotEmpty() == true) amount = plan.amount.toString()
+    if (plan.frequency?.isNotEmpty() == true) frequency = plan.frequency.toString()
 
     val isValidYear by remember { derivedStateOf { year.isNotBlank() } }
     val isValidSemester by remember { derivedStateOf { semester.isNotBlank() } }
@@ -73,6 +77,8 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
                 value = year,
                 onValueChange = { year = it },
                 options = listOf("1", "2", "3", "4"),
+                showError = !isValidYear,
+                errorMessage = invalidYearMsg,
             )
 
             CustomOutlinedSelectField(
@@ -80,6 +86,8 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
                 value = semester,
                 onValueChange = { semester = it },
                 options = listOf("1", "2"),
+                showError = !isValidSemester,
+                errorMessage = invalidSemesterMsg,
             )
 
             CustomOutlinedSelectField(
@@ -136,7 +144,7 @@ fun CreatePlanModal(onCreate: (plan: FeePlan) -> Unit) {
             Spacer(modifier = Modifier.height(50.dp))
 
             Button(
-                onClick = { onCreate(FeePlan(null, year, semester, amount, frequency)) },
+                onClick = { onSave(FeePlan(null, year, semester, amount, frequency)) },
                 enabled = isValidYear && isValidSemester && isValidAmount && isValidFrequency,
                 modifier = Modifier
                     .padding(20.dp)

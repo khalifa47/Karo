@@ -8,27 +8,26 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.karo.models.FeePlan
-import com.example.karo.pages.feeplans.components.CreatePlanModal
+import com.example.karo.pages.feeplans.components.UpsertPlanModal
 import com.example.karo.ui.theme.KaroTheme
+import com.example.karo.utils.Helpers
 import kotlinx.coroutines.launch
 
 @Composable
 fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewModel()) {
     val drawerState = rememberDrawerState(viewModel.drawerValue)
     val scope = rememberCoroutineScope()
+
+    var planToEdit by remember { mutableStateOf(FeePlan()) }
 
     Scaffold(
         floatingActionButton = {
@@ -37,25 +36,35 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
                 backgroundColor = MaterialTheme.colors.primary
             ) { Icon(Icons.Default.Add, "Add a plan") }
         }
-    ) {
-        println(studentId)
-
+    ) { paddingValues ->
         if (studentId !== null) {
             viewModel.getFeePlans(studentId)
 
             FeePlans({ plans ->
-                ModalDrawer({ CreatePlanModal { plan -> viewModel.createFeePlan(studentId, plan) } }, drawerState = drawerState) {
+                ModalDrawer({
+                    UpsertPlanModal(onSave = { plan ->
+                        viewModel.createFeePlan(
+                            studentId,
+                            plan
+                        )
+                    }, plan = planToEdit)
+                }, drawerState = drawerState) {
                     if (plans.isEmpty()) {
                         Box(
                             Modifier
                                 .fillMaxSize()
-                                .padding(it),
+                                .padding(paddingValues),
                             Alignment.Center
                         ) { Text("No fee plan(s) available.") }
                     } else {
                         Box(Modifier.padding(vertical = 4.dp)) {
-                            LazyColumn(modifier = Modifier.padding(it)) {
-                                items(plans) { plan -> ListItem(plan) }
+                            LazyColumn(modifier = Modifier.padding(paddingValues)) {
+                                items(plans) { plan ->
+                                    ListItem(plan) {
+                                        planToEdit = it
+                                        scope.launch { drawerState.open() }
+                                    }
+                                }
                             }
                         }
                     }
@@ -65,7 +74,7 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
             Box(
                 Modifier
                     .fillMaxSize()
-                    .padding(it)
+                    .padding(paddingValues)
             ) {
                 Text("Error finding student", color = MaterialTheme.colors.error)
             }
@@ -74,7 +83,7 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
 }
 
 @Composable
-fun ListItem(plan: FeePlan) {
+fun ListItem(plan: FeePlan, onEdit: (FeePlan) -> Unit) {
     Surface(
         color = MaterialTheme.colors.primary, modifier = Modifier
             .padding(4.dp, 2.dp)
@@ -85,19 +94,41 @@ fun ListItem(plan: FeePlan) {
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Row {
+            Row(Modifier.height(IntrinsicSize.Min)) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-                        Text("Year ${plan.year}")
-                        Text("Semester ${plan.semester}")
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text("Year ${plan.year}", fontWeight = FontWeight.SemiBold)
+                        Text("-", fontWeight = FontWeight.SemiBold)
+                        Text("Semester ${plan.semester}", fontWeight = FontWeight.SemiBold)
                     }
-                    Text(
-                        plan.amount ?: "N/A",
-                        style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.ExtraBold)
+
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Divider(
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .width(1.dp)
                     )
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Column {
+                        Text("Amount to pay per ${plan.frequency} is:")
+                        Text(
+                            Helpers.currencyFormat(plan.amount) ?: "N/A",
+                            style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.ExtraBold)
+                        )
+                    }
                 }
 
-                IconButton(onClick = { /*TODO*/ }) {
+                Divider(
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(start = 30.dp, end = 10.dp)
+                        .width(1.dp)
+                )
+
+                IconButton(onClick = { onEdit(plan) }) {
                     Icon(Icons.Outlined.Edit, "Edit plan")
                 }
             }
@@ -108,7 +139,7 @@ fun ListItem(plan: FeePlan) {
 @Composable
 fun RecyclerView(plans: List<String> = List(100) { "$it" }) {
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-        items(plans) { ListItem(FeePlan("1", "Jane Doe", "777777")) }
+        items(plans) { ListItem(FeePlan("1", "Jane Doe", "777777")) {} }
     }
 }
 
