@@ -44,16 +44,15 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
             viewModel.getFeePlans(studentId)
 
             FeePlans({ plans ->
-                if (plans.isEmpty()) {
-                    Box(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(it)
-                    ) {
-                        Text("No fee plan(s) available.")
-                    }
-                } else {
-                    ModalDrawer({ CreatePlanModal() }, drawerState = drawerState) {
+                ModalDrawer({ CreatePlanModal { plan -> viewModel.createFeePlan(studentId, plan) } }, drawerState = drawerState) {
+                    if (plans.isEmpty()) {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .padding(it),
+                            Alignment.Center
+                        ) { Text("No fee plan(s) available.") }
+                    } else {
                         Box(Modifier.padding(vertical = 4.dp)) {
                             LazyColumn(modifier = Modifier.padding(it)) {
                                 items(plans) { plan -> ListItem(plan) }
