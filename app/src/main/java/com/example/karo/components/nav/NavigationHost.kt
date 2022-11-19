@@ -10,6 +10,7 @@ import com.example.karo.components.MainViewModel
 import com.example.karo.pages.*
 import com.example.karo.pages.feeplans.FeePlansScreen
 import com.example.karo.pages.students.StudentsScreen
+import com.example.karo.pages.transactions.TransactionsPage
 
 @Composable
 fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
@@ -28,7 +29,7 @@ fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
             )
         }
         composable(Routes.FeePayment.name) { FeePaymentPage(viewModel = viewModel) }
-        composable(Routes.Transactions.name) { TransactionsPage(viewModel = viewModel) }
+        composable(Routes.Transactions.name) { TransactionsPage(it.arguments?.getString("id")) }
         composable(Routes.Students.name) { StudentsScreen({ route -> navController.navigate(route) }) }
         composable(Routes.Profile.name) { ProfilePage(viewModel = viewModel) }
         composable(Routes.Settings.name) { SettingsPage(viewModel = viewModel) }
