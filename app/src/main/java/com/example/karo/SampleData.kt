@@ -9,7 +9,7 @@ object SampleData {
     val transactionSample = listOf(
         Transaction(
             "1",
-            100000.00,
+            "100000",
             TransactionType.CREDIT,
             TransactionStatus.COMPLETED,
             "Fees invoiced for semester 3.2",
@@ -17,7 +17,7 @@ object SampleData {
         ),
         Transaction(
             "2",
-            3280000.00,
+            "3280000",
             TransactionType.INVOICE,
             TransactionStatus.FAILED,
             "Fees invoiced for semester 3.2",
@@ -25,7 +25,7 @@ object SampleData {
         ),
         Transaction(
             "3",
-            600000.00,
+            "600000",
             TransactionType.CREDIT,
             TransactionStatus.COMPLETED,
             "Fees invoiced for semester 3.2",
@@ -33,7 +33,7 @@ object SampleData {
         ),
         Transaction(
             "4",
-            600004.00,
+            "600004",
             TransactionType.INVOICE,
             TransactionStatus.COMPLETED,
             "Fees invoiced for semester 3.2",
