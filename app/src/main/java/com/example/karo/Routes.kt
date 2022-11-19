@@ -6,7 +6,7 @@ sealed class Routes(val name: String) {
     object Settings : Routes("settings")
     object FeePlans : Routes("fee-plans/{id}")
     object ManageFees : Routes("manage-fees")
-    object FeePayment : Routes("fee-payment")
-    object Transactions : Routes("transactions")
+    object FeePayment : Routes("fee-payment/{id}")
+    object Transactions : Routes("transactions/{id}")
     object Students : Routes("students")
 }
