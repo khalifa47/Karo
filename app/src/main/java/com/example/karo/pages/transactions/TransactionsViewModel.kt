@@ -1,5 +1,6 @@
 package com.example.karo.pages.transactions
 
+import androidx.compose.material.DrawerValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,8 +24,8 @@ class TransactionsViewModel : ViewModel() {
         private set
     var addTransactionResponse by mutableStateOf<AddTransactionResponse>(Response.Success(false))
         private set
-//    var drawerValue by mutableStateOf(DrawerValue.Closed)
-//        private set
+    var drawerValue by mutableStateOf(DrawerValue.Closed)
+        private set
 
     fun getTransactions(studentId: String) = viewModelScope.launch {
         callbackFlow {
