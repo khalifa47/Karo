@@ -50,7 +50,7 @@ class TransactionsViewModel : ViewModel() {
         addTransactionResponse = try {
             transaction.id = Firebase.firestore.collection("students/${studentId}/transactions").document().id
 
-            Firebase.firestore.collection("students/${studentId}/transactions").document(transaction.id)
+            Firebase.firestore.collection("students/${studentId}/transactions").document(transaction.id!!)
                 .set(transaction)
                 .await()
 

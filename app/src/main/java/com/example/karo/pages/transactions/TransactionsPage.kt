@@ -53,17 +53,21 @@ fun TransactionCard(transaction: Transaction) {
             .fillMaxWidth()
             .padding(all = 8.dp)) {
         Column {
-            Text(
-                text = transaction.description,
-                color = MaterialTheme.colors.primary,
-                style = MaterialTheme.typography.subtitle1
-            )
+            transaction.description?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.subtitle1
+                )
+            }
             Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = transaction.date,
-                color = MaterialTheme.colors.primary,
-                style = MaterialTheme.typography.subtitle2
-            )
+            transaction.date?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.subtitle2
+                )
+            }
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = "ID #" + transaction.id,
@@ -72,7 +76,7 @@ fun TransactionCard(transaction: Transaction) {
             )
         }
         Text(
-            text = (if(transaction.type == TransactionType.INVOICE) "-" else "+") + "KES " + "%,.2f".format(transaction.amount),
+            text = (if(transaction.type == TransactionType.INVOICE) "-" else "+") + "KES " + "%,.2f".format(transaction.amount?.toDouble()),
             color = if(transaction.type == TransactionType.INVOICE) MaterialTheme.colors.error else MaterialTheme.colors.secondary,
             style = MaterialTheme.typography.subtitle2
         )
