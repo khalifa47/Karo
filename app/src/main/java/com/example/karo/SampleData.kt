@@ -1,14 +1,14 @@
 package com.example.karo
 
-import com.example.karo.pages.Transaction
-import com.example.karo.pages.TransactionStatus
-import com.example.karo.pages.TransactionType
+import com.example.karo.models.Transaction
+import com.example.karo.models.TransactionStatus
+import com.example.karo.models.TransactionType
 
 object SampleData {
     // Sample conversation data
     val transactionSample = listOf(
         Transaction(
-            1,
+            "1",
             100000.00,
             TransactionType.CREDIT,
             TransactionStatus.COMPLETED,
@@ -16,7 +16,7 @@ object SampleData {
             "October 10th, 2022"
         ),
         Transaction(
-            2,
+            "2",
             3280000.00,
             TransactionType.INVOICE,
             TransactionStatus.FAILED,
@@ -24,7 +24,7 @@ object SampleData {
             "October 10th, 2022"
         ),
         Transaction(
-            3,
+            "3",
             600000.00,
             TransactionType.CREDIT,
             TransactionStatus.COMPLETED,
@@ -32,7 +32,7 @@ object SampleData {
             "October 10th, 2022"
         ),
         Transaction(
-            4,
+            "4",
             600004.00,
             TransactionType.INVOICE,
             TransactionStatus.COMPLETED,
