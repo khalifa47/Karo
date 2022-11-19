@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,20 +22,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.karo.R
-import com.example.karo.Routes
-import com.example.karo.components.MainViewModel
+import com.example.karo.doNothing
+import com.example.karo.models.Student
 import com.example.karo.ui.theme.KaroTheme
 
 @Composable
-fun StudentsIndex(viewModel: MainViewModel) {
-    viewModel.setCurrentScreen(Routes.Home)
+fun StudentsScreen(onNavigate: (route: String) -> Unit) {
+    Scaffold { padding ->
+        Students(
+            studentsContent = { students ->
+                println("Students   -----------------------------------------${students}")
 
-    RecyclerView()
+                Box(Modifier.padding(vertical = 4.dp)) {
+                    LazyColumn(modifier = Modifier.padding(padding)) {
+                        items(students) { student -> ListItem(student, onNavigate) }
+                    }
+                }
+            }
+        )
+    }
 }
 
 @Composable
-fun ListItem(name: String, admNo: String) {
+fun ListItem(student: Student, onNavigate: (route: String) -> Unit) {
+    println(student.id)
+
     var expanded by remember { mutableStateOf(false) }
     val extraPadding by animateDpAsState(
         if (expanded) 20.dp else 0.dp,
@@ -56,9 +70,9 @@ fun ListItem(name: String, admNo: String) {
         ) {
             Row {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(name)
+                    Text(student.name ?: "Student name")
                     Text(
-                        admNo,
+                        student.adm_no ?: "admission number",
                         style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.ExtraBold)
                     )
                 }
@@ -79,7 +93,7 @@ fun ListItem(name: String, admNo: String) {
                         }
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            IconButton(onClick = { /*TODO*/ }) {
+                            IconButton(onClick = { onNavigate("fee-plans/${student.id}") }) {
                                 Icon(
                                     ImageVector.vectorResource(id = R.drawable.ic_money),
                                     "Manage fee plans"
@@ -95,9 +109,9 @@ fun ListItem(name: String, admNo: String) {
 }
 
 @Composable
-fun RecyclerView(names: List<String> = List(100) { "$it" }) {
+fun RecyclerView(students: List<String> = List(100) { "$it" }) {
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-        items(names) { name -> ListItem("Jane Doe", name) }
+        items(students) { ListItem(Student("1", "Jane Doe", "777777")) { doNothing() } }
     }
 }
 

@@ -69,11 +69,11 @@ class LoginActivity : ComponentActivity() {
                 val focusManager = LocalFocusManager.current
                 var isLoading by remember { mutableStateOf(false) }
 
-                val isValidEmail by derivedStateOf {
-                    Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                val isValidEmail by remember {
+                    derivedStateOf { Patterns.EMAIL_ADDRESS.matcher(email).matches() }
                 }
-                val isValidPassword by derivedStateOf {
-                    password.length > 7
+                val isValidPassword by remember {
+                    derivedStateOf { password.length > 7 }
                 }
                 var isPasswordVisible by remember {
                     mutableStateOf(false)
