@@ -76,7 +76,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
                             "Transactions",
                             R.drawable.transactions,
                             true,
-                            "transactions/${user?.uid}"
+                            route = "transactions/${user?.uid}"
                         ),
                         CardAction(
                             "Fee Plans",
