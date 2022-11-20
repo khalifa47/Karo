@@ -34,7 +34,6 @@ fun TopUpModal(onTopUp: (wallet: Wallet) -> Unit, wallet: Wallet) {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .padding(20.dp)
-            .fillMaxHeight()
     ) {
         Column {
             CustomOutlinedTextField(
