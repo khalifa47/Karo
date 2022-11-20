@@ -50,13 +50,12 @@ class FeePaymentViewModel : ViewModel() {
         }.collect { response -> walletResponse = response }
     }
 
-    fun createWallet(studentId: String, wallet: Wallet) = viewModelScope.launch {
+    fun createWallet(studentId: String) = viewModelScope.launch {
         topUpWalletResponse = Response.Loading
         topUpWalletResponse = try {
-            wallet.id = studentId
 
-            Firebase.firestore.collection("wallets").document(wallet.id!!)
-                .set(wallet)
+            Firebase.firestore.collection("wallets").document(studentId)
+                .set({"amount" to "0"})
                 .await()
 
             Response.Success(true)
