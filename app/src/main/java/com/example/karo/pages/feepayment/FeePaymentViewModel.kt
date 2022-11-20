@@ -69,14 +69,18 @@ class FeePaymentViewModel : ViewModel() {
         topUpWalletResponse = Response.Loading
         topUpWalletResponse = try {
             wallet.id?.let {
-                Firebase.firestore.collection("wallets").document(it)
-                    .update(mapOf("amount" to wallet.amount))
-                    .await()
-
+                val docRef = Firebase.firestore.collection("wallets").document(it)
+                docRef.get().addOnSuccessListener { document ->
+                    docRef.update(
+                        mapOf(
+                            "amount" to (document.data!!["amount"].toString().toDouble() + wallet.amount!!.toDouble()).toString()
+                        )
+                    )
+                }.await()
                 Response.Success(true)
             }
 
-            Response.Failure(Exception("Student ID not set."))
+            Response.Failure(Exception("Wallet ID not set."))
         } catch (e: Exception) {
             Response.Failure(e)
         }
