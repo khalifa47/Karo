@@ -54,7 +54,7 @@ fun AppScaffold(onLogout: () -> Unit) {
                         icon = Icons.Default.Home
                     ),
                     MenuItem(
-                        id = Routes.FeePayment.name,
+                        id = "fee-payment/${user?.uid}",
                         title = "Fee Payment",
                         contentDescription = "Pay fees",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_money)
