@@ -17,7 +17,7 @@ import com.example.karo.pages.transactions.TransactionsPage
 fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
     NavHost(
         navController as NavHostController,
-        startDestination = Routes.Students.name
+        startDestination = Routes.Home.name
     ) {
         composable(Routes.Home.name) {
             HomePage({ route -> navController.navigate(route) }, viewModel)
