@@ -19,13 +19,10 @@ import com.example.karo.components.nav.DrawerBody
 import com.example.karo.components.nav.DrawerHeader
 import com.example.karo.components.nav.MenuItem
 import com.example.karo.components.nav.NavigationHost
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppScaffold(onLogout: () -> Unit) {
-    val user = FirebaseAuth.getInstance().currentUser
-
     val scope = rememberCoroutineScope()
     val viewModel: MainViewModel = viewModel()
     val scaffoldState = rememberScaffoldState()
@@ -54,13 +51,13 @@ fun AppScaffold(onLogout: () -> Unit) {
                         icon = Icons.Default.Home
                     ),
                     MenuItem(
-                        id = "fee-payment/${user?.uid}",
+                        id = Routes.FeePayment.name,
                         title = "Fee Payment",
                         contentDescription = "Pay fees",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_money)
                     ),
                     MenuItem(
-                        id = "transactions/${user?.uid}",
+                        id = Routes.Transactions.name,
                         title = "Transactions",
                         contentDescription = "View transactions",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_sync)
