@@ -1,4 +1,4 @@
-package com.example.karo
+package com.example.karo.pages.feepayment
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
@@ -9,41 +9,83 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.karo.*
+import com.example.karo.pages.feepayment.components.TopUpModal
 import com.example.karo.ui.theme.KaroTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FeePayment(onNavigateToTransactions: () -> Unit) {
-    Column {
+fun FeePaymentPage(studentId: String?, viewModel: FeePaymentViewModel = hiltViewModel()) {
+    val bottomDrawerState = rememberBottomDrawerState(viewModel.bottomDrawerValue)
+    val scope = rememberCoroutineScope()
+
+    if (studentId !== null) {
+        viewModel.getWallet(studentId)
+
+        Wallet({ wallet ->
+            BottomDrawer(
+                drawerState = bottomDrawerState,
+                drawerContent = {
+                    TopUpModal(onTopUp = { wallet ->
+                        viewModel.topUpWallet(wallet)
+                        scope.launch { bottomDrawerState.close() }
+                    }, wallet = wallet)
+                }
+            ) {
+                if (wallet.id == null){
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(all = 8.dp),
+                        Alignment.Center
+                    ) { Text("No wallet available.") }
+                } else {
+                    Column() {
+                        if (wallet.amount != null) {
+                            wallet.amount?.let { WalletInfo(balance = it.toDouble(), scope = scope, bottomDrawerState = bottomDrawerState) }
+                        } else {
+                            WalletInfo(balance = 0.00, scope = scope, bottomDrawerState = bottomDrawerState)
+                        }
+                        FeePaymentForm()
+                    }
+
+                }
+            }
+        })
+    } else {
         FeePaymentForm()
-        Button(onClick = onNavigateToTransactions) {
-            Text(text = "Navigate to Transactions")
-        }
     }
 }
+
 
 @Composable
 fun FeePaymentForm() {
     Column(horizontalAlignment = Alignment.CenterHorizontally){
-        WalletInfo(balance = 300000.00)
         FeePaymentField(label = "Payment Description")
         FeePaymentField(label = "Amount")
         ConfirmButton(label = "Confirm Payment", action = { doNothing() })
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun WalletInfo(balance: Double) {
+fun WalletInfo(balance: Double, scope: CoroutineScope, bottomDrawerState: BottomDrawerState) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 30.dp, bottom = 30.dp)
+            .padding(top = 30.dp, bottom = 30.dp, start = 20.dp, end = 20.dp)
     ) {
         Column (horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Wallet Balance", fontSize = 20.sp)
             Text(text = "KES ${"%,.2f".format(balance)}", fontSize = 30.sp, color = MaterialTheme.colors.primary)
+        }
+        Button({ scope.launch { bottomDrawerState.open() }}) {
+            Text("Top Up")
         }
     }
 
@@ -68,29 +110,29 @@ fun FeePaymentField(label: String) {
     }
 }
 
-@Preview(name = "Wallet Info Preview Light", showBackground = true)
-@Composable
-fun WalletInfoPreviewLight() {
-    KaroTheme {
-        Surface(
-            color = MaterialTheme.colors.background
-        ) {
-            WalletInfo(balance = 300000.00)
-        }
-    }
-}
-
-@Preview(name = "Wallet Info Preview Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun WalletInfoPreviewDark() {
-    KaroTheme {
-        Surface(
-            color = MaterialTheme.colors.background
-        ) {
-            WalletInfo(balance = 300000.00)
-        }
-    }
-}
+//@Preview(name = "Wallet Info Preview Light", showBackground = true)
+//@Composable
+//fun WalletInfoPreviewLight() {
+//    KaroTheme {
+//        Surface(
+//            color = MaterialTheme.colors.background
+//        ) {
+//            WalletInfo(balance = 300000.00)
+//        }
+//    }
+//}
+//
+//@Preview(name = "Wallet Info Preview Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+//@Composable
+//fun WalletInfoPreviewDark() {
+//    KaroTheme {
+//        Surface(
+//            color = MaterialTheme.colors.background
+//        ) {
+//            WalletInfo(balance = 300000.00)
+//        }
+//    }
+//}
 
 @Preview(name = "Payment Field Preview Light", showBackground = true)
 @Composable
@@ -124,7 +166,7 @@ fun FeePaymentPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            FeePayment(onNavigateToTransactions = { doNothing() })
+            FeePaymentForm()
         }
     }
 }
@@ -137,7 +179,7 @@ fun FeePaymentPreviewDark() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            FeePayment(onNavigateToTransactions = { doNothing() })
+            FeePaymentForm()
         }
     }
 }
