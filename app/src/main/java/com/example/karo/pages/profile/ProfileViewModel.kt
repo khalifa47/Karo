@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.karo.utils.Response
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 
@@ -23,6 +24,10 @@ class ProfileViewModel : ViewModel() {
 
     private fun getUser() = viewModelScope.launch {
         callbackFlow {
+            val auth = FirebaseAuth.getInstance()
+            val uid = auth.currentUser?.uid
+
+
             FirebaseAuth.getInstance().addAuthStateListener {
                 val userResponse = if (it.currentUser != null) {
                     val user = it.currentUser!!
@@ -33,6 +38,9 @@ class ProfileViewModel : ViewModel() {
                 }
 
                 trySend(userResponse)
+            }
+            awaitClose {
+                FirebaseAuth.getInstance().removeAuthStateListener{}
             }
         }.collect { response -> userResponse = response }
     }
