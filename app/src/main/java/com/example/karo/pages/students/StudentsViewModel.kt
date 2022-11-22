@@ -19,8 +19,6 @@ typealias StudentsResponse = Response<Students>
 class StudentsViewModel : ViewModel() {
     var studentsResponse by mutableStateOf<StudentsResponse>(Response.Loading)
         private set
-    var openDialog by mutableStateOf(false)
-        private set
 
     init {
         getStudents()
@@ -44,9 +42,5 @@ class StudentsViewModel : ViewModel() {
                 snapshotListener.remove()
             }
         }.collect { response -> studentsResponse = response }
-    }
-
-    fun openDialog() {
-        openDialog = true
     }
 }
