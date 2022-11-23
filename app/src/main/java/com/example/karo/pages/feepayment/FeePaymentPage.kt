@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,6 +22,7 @@ import com.example.karo.pages.feepayment.components.TopUpModal
 import com.example.karo.pages.feeplans.FeePlans
 import com.example.karo.pages.feeplans.FeePlansViewModel
 import com.example.karo.pages.transactions.TransactionsViewModel
+import com.example.karo.utils.Helpers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -71,10 +73,12 @@ fun FeePaymentPage(viewModel: FeePaymentViewModel = hiltViewModel()) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FeePaymentForm(viewModelPayment: FeePaymentViewModel) {
+    val context = LocalContext.current
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
         // fee plan select field
         val feePlanVM: FeePlansViewModel = hiltViewModel()
         val viewModelTransaction: TransactionsViewModel = hiltViewModel()
+
 
         feePlanVM.getFeePlans(studentId = viewModelPayment.user!!.uid)
         FeePlans({ plans ->
@@ -108,17 +112,25 @@ fun FeePaymentForm(viewModelPayment: FeePaymentViewModel) {
             * planList[4] => frequency
             * */
 
-            ConfirmButton(label = "Confirm Payment", action = {
-                viewModelPayment.updateWallet(wallet = Wallet(id = viewModelPayment.user.uid, amount = planList[1]), topUp = false)
-                viewModelTransaction.createTransaction(transaction = Transaction(
-                    amount = planList[1],
-                    type = TransactionType.INVOICE,
-                    status = TransactionStatus.COMPLETED,
-                    description = "Fees for year ${planList[2]}, semester ${planList[3]}",
-                    date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("L d, yyyy"))
-                ))
+            ConfirmButton(label = "Confirm Payment") {
+                viewModelPayment.updateWallet(
+                    wallet = Wallet(
+                        id = viewModelPayment.user.uid,
+                        amount = planList[1]
+                    ), topUp = false
+                )
+                viewModelTransaction.createTransaction(
+                    transaction = Transaction(
+                        amount = planList[1],
+                        type = TransactionType.INVOICE,
+                        status = TransactionStatus.COMPLETED,
+                        description = "Fees for year ${planList[2]}, semester ${planList[3]}",
+                        date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("E, MMMM d, yyyy"))
+                    )
+                )
                 /*TODO -> add toast*/
-            })
+                Helpers.showToast(c = context, message = "Payment Successful")
+            }
         })
     }
 }
