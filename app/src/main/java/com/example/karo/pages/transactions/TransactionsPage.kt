@@ -16,24 +16,19 @@ import com.example.karo.models.Transaction
 import com.example.karo.models.TransactionType
 
 @Composable
-fun TransactionsPage(studentId: String?, viewModel: TransactionsViewModel = hiltViewModel()) {
-    if (studentId !== null) {
-        viewModel.getTransactions(studentId)
-        Transactions({transactions -> 
-            if(transactions.isEmpty()){
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(all = 8.dp),
-                    Alignment.Center
-                ) { Text("No transaction(s) available.") }
-            } else {
-                TransactionList(transactions = transactions)
-            }
-        })
-    } else {
-        TransactionList(transactions = SampleData.transactionSample)
-    }
+fun TransactionsPage(viewModel: TransactionsViewModel = hiltViewModel()) {
+    Transactions({transactions ->
+        if(transactions.isEmpty()){
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(all = 8.dp),
+                Alignment.Center
+            ) { Text("No transaction(s) available.") }
+        } else {
+            TransactionList(transactions = transactions)
+        }
+    })
 }
 @Composable
 fun TransactionList(transactions: List<Transaction>) {

@@ -18,52 +18,48 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FeePaymentPage(studentId: String?, viewModel: FeePaymentViewModel = hiltViewModel()) {
+fun FeePaymentPage(viewModel: FeePaymentViewModel = hiltViewModel()) {
     val bottomDrawerState = rememberBottomDrawerState(viewModel.bottomDrawerValue)
     val scope = rememberCoroutineScope()
 
-    if (studentId !== null) {
-        viewModel.getWallet(studentId)
+    viewModel.getWallet()
 
-        Wallet({ wallet ->
-            BottomDrawer(
-                drawerState = bottomDrawerState,
-                drawerContent = {
-                    TopUpModal(onTopUp = { wallet ->
-                        viewModel.topUpWallet(wallet)
-                        scope.launch { bottomDrawerState.close() }
-                    }, wallet = wallet)
-                }
-            ) {
-                if (wallet.id == null){
-                    Box(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(all = 8.dp),
-                        Alignment.Center
-                    ) { Text("No wallet available.") }
-                } else {
-                    Column() {
-                        if (wallet.amount != null) {
-                            wallet.amount?.let { WalletInfo(balance = it.toDouble(), scope = scope, bottomDrawerState = bottomDrawerState) }
-                        } else {
-                            WalletInfo(balance = 0.00, scope = scope, bottomDrawerState = bottomDrawerState)
-                        }
-                        FeePaymentForm()
-                    }
-
-                }
+    Wallet({ wallet ->
+        BottomDrawer(
+            drawerState = bottomDrawerState,
+            drawerContent = {
+                TopUpModal(onTopUp = { wallet ->
+                    viewModel.topUpWallet(wallet)
+                    scope.launch { bottomDrawerState.close() }
+                }, wallet = wallet)
             }
-        })
-    } else {
-        FeePaymentForm()
-    }
+        ) {
+            if (wallet.id == null){
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(all = 8.dp),
+                    Alignment.Center
+                ) { Text("No wallet available.") }
+            } else {
+                Column(Modifier.fillMaxHeight()) {
+                    if (wallet.amount != null) {
+                        wallet.amount?.let { WalletInfo(balance = it.toDouble(), scope = scope, bottomDrawerState = bottomDrawerState) }
+                    } else {
+                        WalletInfo(balance = 0.00, scope = scope, bottomDrawerState = bottomDrawerState)
+                    }
+                    FeePaymentForm()
+                }
+
+            }
+        }
+    })
 }
 
 
 @Composable
 fun FeePaymentForm() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally){
+    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
         FeePaymentField(label = "Payment Description")
         FeePaymentField(label = "Amount")
         ConfirmButton(label = "Confirm Payment", action = { doNothing() })

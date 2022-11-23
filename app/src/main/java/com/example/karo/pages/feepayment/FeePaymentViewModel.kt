@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.karo.models.Wallet
 import com.example.karo.utils.Response
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
@@ -20,6 +21,8 @@ typealias WalletResponse = Response<Wallet?>
 typealias TopUpWallet = Response<Boolean>
 
 class FeePaymentViewModel : ViewModel() {
+    private val user = FirebaseAuth.getInstance().currentUser
+
     var walletResponse by mutableStateOf<WalletResponse>(Response.Loading)
         private set
     var topUpWalletResponse by mutableStateOf<TopUpWallet>(Response.Success(false))
@@ -29,10 +32,14 @@ class FeePaymentViewModel : ViewModel() {
     var bottomDrawerValue by mutableStateOf(BottomDrawerValue.Closed)
         private set
 
-    fun getWallet(studentId: String) = viewModelScope.launch {
+    init {
+        getWallet()
+    }
+
+    fun getWallet() = viewModelScope.launch {
         callbackFlow {
             val snapshotListener =
-                Firebase.firestore.document("wallets/${studentId}")
+                Firebase.firestore.document("wallets/${user?.uid}")
                     .addSnapshotListener { snapshot, e ->
                         val studentsResponse = if (snapshot != null) {
                             val students = snapshot.toObject(Wallet::class.java)

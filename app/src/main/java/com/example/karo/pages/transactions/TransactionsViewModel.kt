@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.karo.models.Transaction
 import com.example.karo.utils.Response
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
@@ -19,15 +20,21 @@ typealias TransactionsResponse = Response<Transactions>
 typealias AddTransactionResponse = Response<Boolean>
 
 class TransactionsViewModel : ViewModel() {
+    private val user = FirebaseAuth.getInstance().currentUser
+
     var transactionsResponse by mutableStateOf<TransactionsResponse>(Response.Loading)
         private set
     var addTransactionResponse by mutableStateOf<AddTransactionResponse>(Response.Success(false))
         private set
 
-    fun getTransactions(studentId: String) = viewModelScope.launch {
+    init {
+        getTransactions()
+    }
+
+    private fun getTransactions() = viewModelScope.launch {
         callbackFlow {
             val snapshotListener =
-                Firebase.firestore.collection("students/${studentId}/transactions")
+                Firebase.firestore.collection("students/${user?.uid}/transactions")
                     .addSnapshotListener { snapshot, e ->
                         val studentsResponse = if (snapshot != null) {
                             val students = snapshot.toObjects(Transaction::class.java)
