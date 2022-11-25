@@ -45,7 +45,7 @@ fun FeePaymentPage(onNavigate: (route: String) -> Unit, viewModel: FeePaymentVie
                     .fillMaxSize()
                     .padding(all = 8.dp),
                 Alignment.Center
-            ) { Text("Wallet created. Revisit page.") }
+            ) { Text("Wallet created.") }
         } else {
             BottomDrawer(
                 drawerState = bottomDrawerState,
@@ -126,13 +126,6 @@ fun FeePaymentForm(onNavigate: (route: String) -> Unit, viewModelPayment: FeePay
                 showError = !isValidPlan,
                 errorMessage = "Plan is required"
             )
-            /*
-            * planList[0] => id
-            * planList[1] => amount
-            * planList[2] => year
-            * planList[3] => semester
-            * planList[4] => frequency
-            * */
 
             ConfirmButton(label = "Confirm Payment") {
                 viewModelPayment.updateWallet(

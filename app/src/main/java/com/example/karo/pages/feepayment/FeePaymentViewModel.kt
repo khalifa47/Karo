@@ -62,7 +62,7 @@ class FeePaymentViewModel : ViewModel() {
         topUpWalletResponse = try {
 
             Firebase.firestore.collection("wallets").document(user!!.uid)
-                .set({"amount" to "0"})
+                .set(Wallet(id = user.uid, amount = "0"))
                 .await()
 
             Response.Success(true)
