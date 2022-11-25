@@ -84,6 +84,7 @@ fun FeePaymentPage(onNavigate: (route: String) -> Unit, viewModel: FeePaymentVie
 @Composable
 fun FeePaymentForm(onNavigate: (route: String) -> Unit, viewModelPayment: FeePaymentViewModel) {
     val context = LocalContext.current
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -150,7 +151,7 @@ fun FeePaymentForm(onNavigate: (route: String) -> Unit, viewModelPayment: FeePay
                             .format(DateTimeFormatter.ofPattern("E, MMMM d, yyyy"))
                     )
                 )
-                /*TODO -> add toast*/
+
                 Helpers.showToast(c = context, message = "Payment Successful")
 
                 onNavigate(Routes.Transactions.name)

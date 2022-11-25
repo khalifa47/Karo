@@ -86,13 +86,6 @@ fun ListItem(student: Student, onNavigate: (route: String) -> Unit) {
                 Column(modifier = Modifier.padding(bottom = extraPadding.coerceAtLeast(0.dp))) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(Icons.Outlined.Edit, "Edit student")
-                            }
-                            Text("Edit students", fontSize = 10.sp)
-                        }
-
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             IconButton(onClick = { onNavigate("fee-plans/${student.id}") }) {
                                 Icon(
                                     ImageVector.vectorResource(id = R.drawable.ic_money),
