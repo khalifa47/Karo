@@ -1,5 +1,7 @@
 package com.example.karo.components.nav
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -14,6 +16,7 @@ import com.example.karo.pages.profile.ProfileScreen
 import com.example.karo.pages.students.StudentsScreen
 import com.example.karo.pages.transactions.TransactionsPage
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
     NavHost(

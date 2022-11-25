@@ -52,12 +52,12 @@ class TransactionsViewModel : ViewModel() {
         }.collect { response -> transactionsResponse = response }
     }
 
-    fun createTransaction(studentId: String, transaction: Transaction) = viewModelScope.launch {
+    fun createTransaction(transaction: Transaction) = viewModelScope.launch {
         addTransactionResponse = Response.Loading
         addTransactionResponse = try {
-            transaction.id = Firebase.firestore.collection("students/${studentId}/transactions").document().id
+            transaction.id = Firebase.firestore.collection("students/${user?.uid}/transactions").document().id
 
-            Firebase.firestore.collection("students/${studentId}/transactions").document(transaction.id!!)
+            Firebase.firestore.collection("students/${user?.uid}/transactions").document(transaction.id!!)
                 .set(transaction)
                 .await()
 
