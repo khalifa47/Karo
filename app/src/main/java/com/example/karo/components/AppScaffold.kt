@@ -76,19 +76,6 @@ fun AppScaffold(onLogout: () -> Unit) {
                         icon = Icons.Default.Person
                     ),
                     MenuItem(
-                        id = "share",
-                        title = "Share",
-                        contentDescription = "Share",
-                        icon = Icons.Default.Share,
-                        drawer = true
-                    ),
-                    MenuItem(
-                        id = Routes.Settings.name,
-                        title = "Settings",
-                        contentDescription = "View settings",
-                        icon = Icons.Default.Settings
-                    ),
-                    MenuItem(
                         id = "logout",
                         title = "Sign Out",
                         contentDescription = "Sign Out",

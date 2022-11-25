@@ -83,7 +83,8 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
                         ),
                         CardAction(
                             "Payments",
-                            R.drawable.payment_info
+                            R.drawable.payment_info,
+                            route = Routes.FeePayment.name
                         ),
                         CardAction(
                             "Students",
