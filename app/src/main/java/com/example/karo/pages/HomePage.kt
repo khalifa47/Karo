@@ -26,6 +26,7 @@ import com.example.karo.R
 import com.example.karo.Routes
 import com.example.karo.components.MainViewModel
 import com.example.karo.doNothing
+import com.google.firebase.auth.FirebaseAuth
 
 data class CardAction(
     val title: String,
@@ -41,7 +42,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
     Box(modifier = Modifier.padding(20.dp)) {
         Column {
             Text("Good Morning", fontSize = 24.sp)
-            Text("Karo Admin", color = MaterialTheme.colors.primary)
+            Text(FirebaseAuth.getInstance().currentUser?.displayName ?: "Karo Admin", color = MaterialTheme.colors.primary)
 
             Spacer(modifier = Modifier.height(20.dp))
 

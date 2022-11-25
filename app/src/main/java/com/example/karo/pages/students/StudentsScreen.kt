@@ -74,7 +74,7 @@ fun ListItem(student: Student, onNavigate: (route: String) -> Unit) {
                 }
 
                 OutlinedButton(onClick = { expanded = !expanded }) {
-                    Text("${if (expanded) "Show" else "Hide"} actions")
+                    Text("${if (expanded) "Hide" else "Show"} actions")
                 }
             }
 

@@ -3,6 +3,7 @@ package com.example.karo.pages.feepayment
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,7 +32,11 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FeePaymentPage(onNavigate: (route: String) -> Unit, viewModel: FeePaymentViewModel = hiltViewModel()) {
+fun FeePaymentPage(
+    onNavigate: (route: String) -> Unit,
+    viewModel: FeePaymentViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
     val bottomDrawerState = rememberBottomDrawerState(viewModel.bottomDrawerValue)
     val scope = rememberCoroutineScope()
 
@@ -53,26 +58,34 @@ fun FeePaymentPage(onNavigate: (route: String) -> Unit, viewModel: FeePaymentVie
                     TopUpModal(onTopUp = { wallet ->
                         viewModel.updateWallet(wallet, true)
                         scope.launch { bottomDrawerState.close() }
+
+                        Helpers.showToast(c = context, message = "Wallet Top Up Successful!")
                     }, wallet = wallet)
                 }
             ) {
-                Column(Modifier.fillMaxHeight()) {
-                    if (wallet.amount != null) {
-                        wallet.amount?.let {
+                Box(
+                    Modifier
+                        .padding(20.dp)
+                        .fillMaxHeight(), contentAlignment = Alignment.Center
+                ) {
+                    Column {
+                        if (wallet.amount != null) {
+                            wallet.amount?.let {
+                                WalletInfo(
+                                    balance = it.toDouble(),
+                                    scope = scope,
+                                    bottomDrawerState = bottomDrawerState
+                                )
+                            }
+                        } else {
                             WalletInfo(
-                                balance = it.toDouble(),
+                                balance = 0.00,
                                 scope = scope,
                                 bottomDrawerState = bottomDrawerState
                             )
                         }
-                    } else {
-                        WalletInfo(
-                            balance = 0.00,
-                            scope = scope,
-                            bottomDrawerState = bottomDrawerState
-                        )
+                        FeePaymentForm(onNavigate, viewModelPayment = viewModel)
                     }
-                    FeePaymentForm(onNavigate, viewModelPayment = viewModel)
                 }
             }
         }
@@ -92,7 +105,6 @@ fun FeePaymentForm(onNavigate: (route: String) -> Unit, viewModelPayment: FeePay
         // fee plan select field
         val feePlanVM: FeePlansViewModel = hiltViewModel()
         val viewModelTransaction: TransactionsViewModel = hiltViewModel()
-
 
         feePlanVM.getFeePlans(studentId = viewModelPayment.user!!.uid)
         FeePlans({ plans ->

@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.karo.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun DrawerHeader() {
@@ -38,8 +39,11 @@ fun DrawerHeader() {
                     .size(30.dp)
                     .clip(CircleShape)
             )
-            Text(text = "Karo Admin", fontSize = 16.sp)
-            Text(text = "@karoline", fontSize = 12.sp)
+            Text(
+                text = FirebaseAuth.getInstance().currentUser?.displayName ?: "Karo Admin",
+                fontSize = 16.sp
+            )
+            Text(text = "@karo", fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(7.dp))
 
@@ -84,8 +88,12 @@ fun DrawerBody(
                 Text(text = item.title, style = itemTextStyle, modifier = Modifier.weight(1f))
             }
 
-            if(item.drawer) {
-                Divider(thickness = 0.5.dp, color = MaterialTheme.colors.onBackground, modifier = Modifier.padding(vertical = 20.dp))
+            if (item.drawer) {
+                Divider(
+                    thickness = 0.5.dp,
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.padding(vertical = 20.dp)
+                )
             }
         }
     }
