@@ -26,7 +26,6 @@ import com.example.karo.R
 import com.example.karo.Routes
 import com.example.karo.components.MainViewModel
 import com.example.karo.doNothing
-import com.google.firebase.auth.FirebaseAuth
 
 data class CardAction(
     val title: String,
@@ -37,7 +36,6 @@ data class CardAction(
 
 @Composable
 fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
-    val user = FirebaseAuth.getInstance().currentUser
     viewModel.setCurrentScreen(Routes.Home)
 
     Box(modifier = Modifier.padding(20.dp)) {
@@ -76,7 +74,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
                             "Transactions",
                             R.drawable.transactions,
                             true,
-                            route = "transactions/${user?.uid}"
+                            route = Routes.Transactions.name
                         ),
                         CardAction(
                             "Fee Plans",

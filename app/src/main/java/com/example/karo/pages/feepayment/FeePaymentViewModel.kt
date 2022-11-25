@@ -21,7 +21,7 @@ typealias WalletResponse = Response<Wallet?>
 typealias TopUpWallet = Response<Boolean>
 
 class FeePaymentViewModel : ViewModel() {
-    private val user = FirebaseAuth.getInstance().currentUser
+    val user = FirebaseAuth.getInstance().currentUser
 
     var walletResponse by mutableStateOf<WalletResponse>(Response.Loading)
         private set
@@ -57,11 +57,11 @@ class FeePaymentViewModel : ViewModel() {
         }.collect { response -> walletResponse = response }
     }
 
-    fun createWallet(studentId: String) = viewModelScope.launch {
+    fun createWallet() = viewModelScope.launch {
         topUpWalletResponse = Response.Loading
         topUpWalletResponse = try {
 
-            Firebase.firestore.collection("wallets").document(studentId)
+            Firebase.firestore.collection("wallets").document(user!!.uid)
                 .set({"amount" to "0"})
                 .await()
 
@@ -71,16 +71,18 @@ class FeePaymentViewModel : ViewModel() {
         }
     }
 
-    fun topUpWallet(wallet: Wallet) = viewModelScope.launch {
+    fun updateWallet(wallet: Wallet, topUp: Boolean) = viewModelScope.launch {
         topUpWalletResponse = Response.Loading
         topUpWalletResponse = try {
             wallet.id?.let {
                 val docRef = Firebase.firestore.collection("wallets").document(it)
                 docRef.get().addOnSuccessListener { document ->
                     docRef.update(
-                        mapOf(
-                            "amount" to (document.data!!["amount"].toString().toDouble() + wallet.amount!!.toDouble()).toString()
-                        )
+                        if (topUp)
+                            mapOf("amount" to (document.data!!["amount"].toString().toDouble() + wallet.amount!!.toDouble()).toString())
+                        else
+                            mapOf("amount" to (document.data!!["amount"].toString().toDouble() - wallet.amount!!.toDouble()).toString())
+
                     )
                 }.await()
                 Response.Success(true)
