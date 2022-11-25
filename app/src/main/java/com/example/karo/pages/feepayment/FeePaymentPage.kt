@@ -31,14 +31,14 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FeePaymentPage(viewModel: FeePaymentViewModel = hiltViewModel()) {
+fun FeePaymentPage(onNavigate: (route: String) -> Unit, viewModel: FeePaymentViewModel = hiltViewModel()) {
     val bottomDrawerState = rememberBottomDrawerState(viewModel.bottomDrawerValue)
     val scope = rememberCoroutineScope()
 
     viewModel.getWallet()
 
     Wallet({ wallet ->
-        if (wallet.id == null){
+        if (wallet.id == null) {
             viewModel.createWallet()
             Box(
                 Modifier
@@ -58,11 +58,21 @@ fun FeePaymentPage(viewModel: FeePaymentViewModel = hiltViewModel()) {
             ) {
                 Column(Modifier.fillMaxHeight()) {
                     if (wallet.amount != null) {
-                        wallet.amount?.let { WalletInfo(balance = it.toDouble(), scope = scope, bottomDrawerState = bottomDrawerState) }
+                        wallet.amount?.let {
+                            WalletInfo(
+                                balance = it.toDouble(),
+                                scope = scope,
+                                bottomDrawerState = bottomDrawerState
+                            )
+                        }
                     } else {
-                        WalletInfo(balance = 0.00, scope = scope, bottomDrawerState = bottomDrawerState)
+                        WalletInfo(
+                            balance = 0.00,
+                            scope = scope,
+                            bottomDrawerState = bottomDrawerState
+                        )
                     }
-                    FeePaymentForm(viewModelPayment = viewModel)
+                    FeePaymentForm(onNavigate, viewModelPayment = viewModel)
                 }
             }
         }
@@ -72,9 +82,13 @@ fun FeePaymentPage(viewModel: FeePaymentViewModel = hiltViewModel()) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FeePaymentForm(viewModelPayment: FeePaymentViewModel) {
+fun FeePaymentForm(onNavigate: (route: String) -> Unit, viewModelPayment: FeePaymentViewModel) {
     val context = LocalContext.current
-    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         // fee plan select field
         val feePlanVM: FeePlansViewModel = hiltViewModel()
         val viewModelTransaction: TransactionsViewModel = hiltViewModel()
@@ -82,24 +96,32 @@ fun FeePaymentForm(viewModelPayment: FeePaymentViewModel) {
 
         feePlanVM.getFeePlans(studentId = viewModelPayment.user!!.uid)
         FeePlans({ plans ->
-            var plan by rememberSaveable { mutableStateOf("") }
-            val planList by remember { derivedStateOf { plan.filterNot { it == '[' || it == ']' }.split(",").toList() }}
-            val isValidPlan by remember { derivedStateOf { plan.isNotBlank() } }
+            var planValue by rememberSaveable { mutableStateOf("") }
+            val plan by remember {
+                derivedStateOf {
+                    plans.first { plan ->
+                        "${Helpers.currencyFormat(plan.amount)}/${plan.frequency} for Yr. ${plan.year} Sem. ${plan.semester}" == planValue
+                    }
+                }
+            }
+            val isValidPlan by remember { derivedStateOf { planValue.isNotBlank() } }
             val feePlansList: MutableList<String> = mutableListOf()
+
             plans.forEach {
-                feePlansList.add(listOf(
+                feePlansList.add("${Helpers.currencyFormat(it.amount)}/${it.frequency} for Yr. ${it.year} Sem. ${it.semester}")
+                /*feePlansList.add(listOf(
                     it.id.toString(),
                     it.amount.toString(),
                     it.year.toString(),
                     it.semester.toString(),
                     it.frequency.toString()).toString()
-                )
+                )*/
             }
 
             CustomOutlinedSelectField(
                 label = "Fee Plan",
-                value = plan,
-                onValueChange = { plan = it },
+                value = planValue,
+                onValueChange = { planValue = it },
                 options = feePlansList.toList(),
                 showError = !isValidPlan,
                 errorMessage = "Plan is required"
@@ -116,20 +138,23 @@ fun FeePaymentForm(viewModelPayment: FeePaymentViewModel) {
                 viewModelPayment.updateWallet(
                     wallet = Wallet(
                         id = viewModelPayment.user.uid,
-                        amount = planList[1]
+                        amount = plan.amount
                     ), topUp = false
                 )
                 viewModelTransaction.createTransaction(
                     transaction = Transaction(
-                        amount = planList[1],
+                        amount = plan.amount,
                         type = TransactionType.INVOICE,
                         status = TransactionStatus.COMPLETED,
-                        description = "Fees for year ${planList[2]}, semester ${planList[3]}",
-                        date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("E, MMMM d, yyyy"))
+                        description = "Fees for year ${plan.year}, semester ${plan.semester}",
+                        date = LocalDateTime.now()
+                            .format(DateTimeFormatter.ofPattern("E, MMMM d, yyyy"))
                     )
                 )
-                /*TODO -> add toast*/
+
                 Helpers.showToast(c = context, message = "Payment Successful")
+
+                onNavigate(Routes.Transactions.name)
             }
         })
     }
@@ -145,14 +170,22 @@ fun WalletInfo(balance: Double, scope: CoroutineScope, bottomDrawerState: Bottom
             .fillMaxWidth()
             .padding(top = 30.dp, bottom = 30.dp, start = 20.dp, end = 20.dp)
     ) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Wallet Balance", fontSize = 20.sp)
-            Text(text = "KES ${"%,.2f".format(balance)}", fontSize = 30.sp, color = MaterialTheme.colors.primary)
+            Text(
+                text = "KES ${"%,.2f".format(balance)}",
+                fontSize = 30.sp,
+                color = MaterialTheme.colors.primary
+            )
         }
-        Button({ scope.launch { bottomDrawerState.open() }}) {
+        Button({ scope.launch { bottomDrawerState.open() } }) {
             Text("Top Up")
         }
     }
 
-    Divider(thickness = 0.5.dp, color = MaterialTheme.colors.onBackground, modifier = Modifier.padding(bottom = 20.dp))
+    Divider(
+        thickness = 0.5.dp,
+        color = MaterialTheme.colors.onBackground,
+        modifier = Modifier.padding(bottom = 20.dp)
+    )
 }

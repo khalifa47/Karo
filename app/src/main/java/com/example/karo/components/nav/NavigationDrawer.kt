@@ -38,8 +38,8 @@ fun DrawerHeader() {
                     .size(30.dp)
                     .clip(CircleShape)
             )
-            Text(text = "Lil Nabz", fontSize = 16.sp)
-            Text(text = "@nabcellent", fontSize = 12.sp)
+            Text(text = "Karo Admin", fontSize = 16.sp)
+            Text(text = "@karoline", fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(7.dp))
 

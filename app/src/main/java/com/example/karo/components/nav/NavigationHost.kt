@@ -18,7 +18,7 @@ import com.example.karo.pages.transactions.TransactionsPage
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
+fun NavigationHost(navController: NavController, viewModel: MainViewModel, onLogout: () -> Unit) {
     NavHost(
         navController as NavHostController,
         startDestination = Routes.Home.name
@@ -27,10 +27,10 @@ fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
             HomePage({ route -> navController.navigate(route) }, viewModel)
         }
         composable(Routes.FeePlans.name) { FeePlansScreen(it.arguments?.getString("id")) }
-        composable(Routes.FeePayment.name) { FeePaymentPage() }
+        composable(Routes.FeePayment.name) { FeePaymentPage({ route -> navController.navigate(route) }) }
         composable(Routes.Transactions.name) { TransactionsPage() }
         composable(Routes.Students.name) { StudentsScreen { route -> navController.navigate(route) } }
-        composable(Routes.Profile.name) { ProfileScreen() }
+        composable(Routes.Profile.name) { ProfileScreen(onLogout) }
         composable(Routes.Settings.name) { SettingsPage(viewModel = viewModel) }
     }
 }

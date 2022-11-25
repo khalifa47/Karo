@@ -41,7 +41,7 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
     Box(modifier = Modifier.padding(20.dp)) {
         Column {
             Text("Good Morning", fontSize = 24.sp)
-            Text("Ghost Rider", color = MaterialTheme.colors.primary)
+            Text("Karo Admin", color = MaterialTheme.colors.primary)
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -79,11 +79,12 @@ fun HomePage(onNavigate: (route: String) -> Unit, viewModel: MainViewModel) {
                         CardAction(
                             "Fee Plans",
                             R.drawable.fee_plans,
-                            route = Routes.ManageFees.name
+                            route = Routes.Students.name
                         ),
                         CardAction(
                             "Payments",
-                            R.drawable.payment_info
+                            R.drawable.payment_info,
+                            route = Routes.FeePayment.name
                         ),
                         CardAction(
                             "Students",

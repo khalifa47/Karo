@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
 
     var planToEdit by remember { mutableStateOf(FeePlan()) }
     val isUpdate = planToEdit.id?.isNotEmpty() == true
+    val context = LocalContext.current
 
     Scaffold(
         floatingActionButton = {
@@ -52,11 +54,15 @@ fun FeePlansScreen(studentId: String?, viewModel: FeePlansViewModel = hiltViewMo
                         onSave = { plan ->
                             viewModel.updateFeePlan(studentId, plan)
                             scope.launch { drawerState.close() }
+
+                            Helpers.showToast(context, "Plan Updated Successfully!")
                         },
                         plan = planToEdit
                     ) else CreatePlanModal(onSave = { plan ->
                         viewModel.createFeePlan(studentId, plan)
                         scope.launch { drawerState.close() }
+
+                        Helpers.showToast(context, "Plan Created Successfully!")
                     })
                 }, drawerState = drawerState) {
                     if (plans.isEmpty()) {

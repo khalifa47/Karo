@@ -1,5 +1,7 @@
 package com.example.karo.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -21,6 +23,7 @@ import com.example.karo.components.nav.MenuItem
 import com.example.karo.components.nav.NavigationHost
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppScaffold(onLogout: () -> Unit) {
     val scope = rememberCoroutineScope()
@@ -76,19 +79,6 @@ fun AppScaffold(onLogout: () -> Unit) {
                         icon = Icons.Default.Person
                     ),
                     MenuItem(
-                        id = "share",
-                        title = "Share",
-                        contentDescription = "Share",
-                        icon = Icons.Default.Share,
-                        drawer = true
-                    ),
-                    MenuItem(
-                        id = Routes.Settings.name,
-                        title = "Settings",
-                        contentDescription = "View settings",
-                        icon = Icons.Default.Settings
-                    ),
-                    MenuItem(
                         id = "logout",
                         title = "Sign Out",
                         contentDescription = "Sign Out",
@@ -107,14 +97,12 @@ fun AppScaffold(onLogout: () -> Unit) {
                             launchSingleTop = true
                         }
                     }
-
-                    println("Clicked on ========================== ${it.title}")
                 }
             )
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            NavigationHost(navController = navController, viewModel = viewModel)
+            NavigationHost(navController = navController, viewModel = viewModel, onLogout)
         }
     }
 }
