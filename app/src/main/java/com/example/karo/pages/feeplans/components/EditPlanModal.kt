@@ -27,8 +27,6 @@ import com.example.karo.models.FeePlan
 
 @Composable
 fun EditPlanModal(onSave: (plan: FeePlan) -> Unit, plan: FeePlan) {
-    println("PLAN: ======================================================= $plan")
-
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 

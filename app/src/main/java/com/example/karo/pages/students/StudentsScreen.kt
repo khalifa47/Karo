@@ -33,8 +33,6 @@ fun StudentsScreen(onNavigate: (route: String) -> Unit) {
     Scaffold { padding ->
         Students(
             studentsContent = { students ->
-                println("Students   -----------------------------------------${students}")
-
                 Box(Modifier.padding(vertical = 4.dp)) {
                     LazyColumn(modifier = Modifier.padding(padding)) {
                         items(students) { student -> ListItem(student, onNavigate) }
@@ -47,8 +45,6 @@ fun StudentsScreen(onNavigate: (route: String) -> Unit) {
 
 @Composable
 fun ListItem(student: Student, onNavigate: (route: String) -> Unit) {
-    println(student.id)
-
     var expanded by remember { mutableStateOf(false) }
     val extraPadding by animateDpAsState(
         if (expanded) 20.dp else 0.dp,

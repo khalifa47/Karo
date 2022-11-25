@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -19,9 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.karo.R
 import com.example.karo.components.CustomOutlinedTextField
+import com.example.karo.utils.Helpers
 
 @Composable
 fun ProfileScreen(onLogout: () -> Unit, viewModel: ProfileViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+
     Scaffold { padding ->
         Profile(
             userContent = { user ->
@@ -32,8 +36,6 @@ fun ProfileScreen(onLogout: () -> Unit, viewModel: ProfileViewModel = hiltViewMo
                 val isValidEmail by remember {
                     derivedStateOf { Patterns.EMAIL_ADDRESS.matcher(email).matches() }
                 }
-
-                println("User   -----------------------------------------${name}")
 
                 Box(
                     modifier = Modifier
@@ -85,7 +87,11 @@ fun ProfileScreen(onLogout: () -> Unit, viewModel: ProfileViewModel = hiltViewMo
                         )
 
                         Button(
-                            onClick = { viewModel.updateUser(name, email, password) },
+                            onClick = {
+                                viewModel.updateUser(name, email, password)
+
+                                Helpers.showToast(context, "Profile updated successfully!")
+                            },
                             enabled = isValidEmail,
                             modifier = Modifier
                                 .padding(20.dp)

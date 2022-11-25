@@ -97,8 +97,6 @@ fun AppScaffold(onLogout: () -> Unit) {
                             launchSingleTop = true
                         }
                     }
-
-                    println("Clicked on ========================== ${it.title}")
                 }
             )
         }

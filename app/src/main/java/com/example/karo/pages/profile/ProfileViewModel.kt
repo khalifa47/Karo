@@ -48,26 +48,32 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun updateUser(name: String, email: String, password: String) {
-        val user = Firebase.auth.currentUser
-
-        val profileUpdates = userProfileChangeRequest {
-            displayName = name
-        }
+        val user = Firebase.auth.currentUser!!
 
         userResponse = try {
-            user!!.updateProfile(profileUpdates).addOnCompleteListener {
-                if (it.isCanceled) Response.Failure(it.exception)
+            if(name.isNotEmpty()) {
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = name
+                }
+
+                user.updateProfile(profileUpdates).addOnCompleteListener {
+                    if (it.isCanceled) Response.Failure(it.exception)
+                }
             }
 
-            user.updateEmail(email).addOnCompleteListener {
-                if (it.isCanceled) Response.Failure(it.exception)
+            if(email.isNotEmpty()) {
+                user.updateEmail(email).addOnCompleteListener {
+                    if (it.isCanceled) Response.Failure(it.exception)
+                }
             }
 
-            user.updatePassword(password).addOnCompleteListener {
-                if (it.isCanceled) Response.Failure(it.exception)
+            if(password.isNotEmpty()) {
+                user.updatePassword(password).addOnCompleteListener {
+                    if (it.isCanceled) Response.Failure(it.exception)
+                }
             }
 
-            Response.Success(FirebaseAuth.getInstance().currentUser!!)
+            Response.Success(user)
         } catch (e: Exception) {
             Response.Failure(e)
         }
