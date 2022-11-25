@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.karo.utils.Response
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
@@ -24,10 +27,6 @@ class ProfileViewModel : ViewModel() {
 
     private fun getUser() = viewModelScope.launch {
         callbackFlow {
-            val auth = FirebaseAuth.getInstance()
-            val uid = auth.currentUser?.uid
-
-
             FirebaseAuth.getInstance().addAuthStateListener {
                 val userResponse = if (it.currentUser != null) {
                     val user = it.currentUser!!
@@ -40,8 +39,38 @@ class ProfileViewModel : ViewModel() {
                 trySend(userResponse)
             }
             awaitClose {
-                FirebaseAuth.getInstance().removeAuthStateListener{}
+                FirebaseAuth.getInstance().removeAuthStateListener {}
             }
         }.collect { response -> userResponse = response }
+    }
+
+    fun updateUser(name: String, email: String, password: String) {
+        val user = Firebase.auth.currentUser
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name
+        }
+
+        userResponse = try {
+            user!!.updateProfile(profileUpdates).addOnCompleteListener {
+                if (it.isCanceled) Response.Failure(it.exception)
+            }
+
+            user.updateEmail(email).addOnCompleteListener {
+                if (it.isCanceled) Response.Failure(it.exception)
+            }
+
+            user.updatePassword(password).addOnCompleteListener {
+                if (it.isCanceled) Response.Failure(it.exception)
+            }
+
+            Response.Success(FirebaseAuth.getInstance().currentUser!!)
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    fun deleteAccount() {
+
     }
 }

@@ -1,5 +1,7 @@
 package com.example.karo.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -21,6 +23,7 @@ import com.example.karo.components.nav.MenuItem
 import com.example.karo.components.nav.NavigationHost
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppScaffold(onLogout: () -> Unit) {
     val scope = rememberCoroutineScope()
@@ -101,7 +104,7 @@ fun AppScaffold(onLogout: () -> Unit) {
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            NavigationHost(navController = navController, viewModel = viewModel)
+            NavigationHost(navController = navController, viewModel = viewModel, onLogout)
         }
     }
 }

@@ -158,20 +158,6 @@ class LoginActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        TextButton({ doNothing() }) {
-                            Text(
-                                "Forgot Password?",
-                                color = MaterialTheme.colors.primary,
-                                fontStyle = FontStyle.Italic,
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
-                        }
-                    }
-
                     if (isLoading) {
                         CircularProgressIndicator(modifier = Modifier.size(30.dp))
                     } else {
