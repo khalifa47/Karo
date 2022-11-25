@@ -27,7 +27,7 @@ fun NavigationHost(navController: NavController, viewModel: MainViewModel) {
             HomePage({ route -> navController.navigate(route) }, viewModel)
         }
         composable(Routes.FeePlans.name) { FeePlansScreen(it.arguments?.getString("id")) }
-        composable(Routes.FeePayment.name) { FeePaymentPage() }
+        composable(Routes.FeePayment.name) { FeePaymentPage({ route -> navController.navigate(route) }) }
         composable(Routes.Transactions.name) { TransactionsPage() }
         composable(Routes.Students.name) { StudentsScreen { route -> navController.navigate(route) } }
         composable(Routes.Profile.name) { ProfileScreen() }
