@@ -54,6 +54,8 @@ class LoginActivity : ComponentActivity() {
             return auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
+                        Helpers.showToast(this, "Login Successful!")
+
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     } else {

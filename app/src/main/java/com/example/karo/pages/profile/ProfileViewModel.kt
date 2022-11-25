@@ -16,9 +16,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 
 typealias UserResponse = Response<FirebaseUser>
+typealias DeleteUserResponse = Response<Boolean>
 
 class ProfileViewModel : ViewModel() {
     var userResponse by mutableStateOf<UserResponse>(Response.Loading)
+        private set
+    var deleteUserResponse by mutableStateOf<DeleteUserResponse>(Response.Success(false))
         private set
 
     init {
@@ -71,6 +74,19 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun deleteAccount() {
+        val user = Firebase.auth.currentUser!!
 
+        deleteUserResponse = try {
+            user.delete()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Response.Success(true)
+                    }
+                }
+
+            Response.Failure(Exception("Unable to delete user!"))
+        }catch(e:Exception) {
+            Response.Failure(e)
+        }
     }
 }
